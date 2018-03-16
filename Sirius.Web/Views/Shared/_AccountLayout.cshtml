@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="favicon.ico">
+    <title>@ViewBag.Title</title>
+    <!-- Bootstrap core CSS -->
+    @Styles.Render("~/Template/bootstrap")
+    @Styles.Render("~/account/css")
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    @RenderSection("styles", required: false)
+</head>
+
+<body>
+    <div class="login-wrapper">
+        <div class="bg-pic">
+            <img src="~/Content/image/office.jpg" alt="" class="lazy">
+            <div class="col-md-12 post-content hidden-sm hidden-xs">
+                <div class="col-md-7">
+                    <h1>Sirius.<i>ly</i></h1>
+                    <h4><b>Feedback is Important</b></h4>
+                </div>
+            </div>
+            <div class="col-md-12 bottom-content hidden-sm hidden-xs">
+                <div class="col-md-7">
+                    <h3></h3>
+                    <h4><b>Made with <span class="glyphicon glyphicon-heart text-danger"></span> for your office.</b></h4>
+                    <h5><strong>Copyright &copy; 2016 <a href="#" style="color:#00a65a;">GeekCampStudios</a>.</strong> All rights reserved.</h5>
+                </div>
+            </div>
+        </div>
+        <div class="login-container bg-white">
+            @RenderBody()
+        </div>
+    </div>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/unobtrusive-ajax")
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/jqueryvalmin")
+    @Scripts.Render("~/bundles/bootstrap")
+    <script type="text/javascript">
+        $('[data-toggle="tooltip"]').tooltip();
+    </script>
+    @RenderSection("scripts", required: false)
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug 
+    <!-- <script src="js/ie10-viewport-bug-workaround.js"></script> -->
+</body>
+</html>

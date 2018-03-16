@@ -1,0 +1,206 @@
+﻿@using Sirius.Web.Infrastructure.Constants
+
+@{
+    string active = ViewBag.Active as string;
+    const string ACTIVE_LINK = "active";
+
+    #region activeLinks
+    //if (active == "dashboard")
+    //{
+    //    ViewBag.Dashboard = ACTIVE_LINK;
+    //}
+    //if (active == "tasks")
+    //{
+    //    ViewBag.Tasks = ACTIVE_LINK;
+    //}
+    //if (active == "competencies")
+    //{
+    //    ViewBag.Competencies = ACTIVE_LINK;
+    //}
+    //if (active == "appraisal")
+    //{
+    //    ViewBag.Appraisal = ACTIVE_LINK;
+    //}
+    //if (active == "mystaff")
+    //{
+    //    ViewBag.Mystaff = ACTIVE_LINK;
+    //}
+    //if (active == "stafftask")
+    //{
+    //    ViewBag.Stafftask = ACTIVE_LINK;
+    //}
+    //if (active == "assignedtask")
+    //{
+    //    ViewBag.Assignedtask = ACTIVE_LINK;
+    //}
+    //if (active == "d_cluster")
+    //{
+    //    ViewBag.D_cluster = ACTIVE_LINK;
+    //}
+    //if (active == "d_contest")
+    //{
+    //    ViewBag.D_contest = ACTIVE_LINK;
+    //}
+    //if (active == "d_competencies")
+    //{
+    //    ViewBag.D_competencies = ACTIVE_LINK;
+    //}
+    //if (active == "allstaff")
+    //{
+    //    ViewBag.Allstaff = ACTIVE_LINK;
+    //}
+    //if (active == "departments")
+    //{
+    //    ViewBag.Departments = ACTIVE_LINK;
+    //}
+    //if (active == "a_appraisalcycles")
+    //{
+    //    ViewBag.Appraisalsettings = ACTIVE_LINK;
+    //    ViewBag.A_appraisalcycles = ACTIVE_LINK;
+    //}
+    //if (active == "a_appraisalformat")
+    //{
+    //    ViewBag.Appraisalsettings = ACTIVE_LINK;
+    //    ViewBag.A_appraisalformat = ACTIVE_LINK;
+    //}
+    //if (active == "a_recommendations")
+    //{
+    //    ViewBag.Appraisalsettings = ACTIVE_LINK;
+    //    ViewBag.A_recommendations = ACTIVE_LINK;
+    //}
+    //if (active == "a_competencies")
+    //{
+    //    ViewBag.Appraisalsettings = ACTIVE_LINK;
+    //    ViewBag.A_competencies = ACTIVE_LINK;
+    //}
+    //if (active == "r_staffreport")
+    //{
+    //    ViewBag.Reports = ACTIVE_LINK;
+    //    ViewBag.R_staffreport = ACTIVE_LINK;
+    //}
+    //if (active == "r_appraisalcontests")
+    //{
+    //    ViewBag.Reports = ACTIVE_LINK;
+    //    ViewBag.R_appraisalcontests = ACTIVE_LINK;
+    //}
+    //if (active == "r_departmentcluster")
+    //{
+    //    ViewBag.Reports = ACTIVE_LINK;
+    //    ViewBag.R_departmentcluster = ACTIVE_LINK;
+    //}
+    //if (active == "r_recommendationreport")
+    //{
+    //    ViewBag.Reports = ACTIVE_LINK;
+    //    ViewBag.R_recommendationreport = ACTIVE_LINK;
+    //}
+    //if (active == "i_departments")
+    //{
+    //    ViewBag.I_departments = ACTIVE_LINK;
+    //}
+    //if (active == "i_priviledges")
+    //{
+    //    ViewBag.I_priviledges = ACTIVE_LINK;
+    //}
+    //if (active == "m_departmentsettings")
+    //{
+    //    ViewBag.M_departmentsettings = ACTIVE_LINK;
+    //}
+    //if (active == "m_staffstatus")
+    //{
+    //    ViewBag.M_staffstatus = ACTIVE_LINK;
+    //}
+    //if (active == "m_staffpriviledges")
+    //{
+    //    ViewBag.M_staffpriviledges = ACTIVE_LINK;
+    //}
+    //if (active == "m_timeframe")
+    //{
+    //    ViewBag.M_timeframe = ACTIVE_LINK;
+    //}
+    #endregion
+
+    bool isStaff = User.IsInRole(SiriusRoles.USER);
+    bool isSupervisor = User.IsInRole(SiriusRoles.SUPERVISOR);
+    bool isHOD = User.IsInRole(SiriusRoles.HOD);
+    bool isPMA = User.IsInRole(SiriusRoles.PMA);
+    bool isITA = User.IsInRole(SiriusRoles.ITA);
+    bool isMachine = User.IsInRole(SiriusRoles.MACHINE);
+    string deptName = User.Identity.GetDepartmentShortname();
+}
+
+@if (Request.IsAuthenticated)
+{
+    <!-- add Role Based Links -->
+    <li class="header">NAVIGATION</li>
+    
+    if (isStaff)
+    {
+        <li class="header"><b>@User.Identity.GetUserFirstname()</b></li>
+        <!-- Optionally, you can add icons to the links -->
+        <li class="@ViewBag.Dashboard"><a href="~/dashboard"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
+        <li class="@ViewBag.Tasks"><a href="~/tasks"><i class="fa fa-link"></i> <span>Your Tasks</span></a></li>
+        <li class="@ViewBag.Competencies"><a href="~/competencies"><i class="fa fa-link"></i> <span>Your Competencies</span></a></li>
+        <li class="@ViewBag.Appraisal"><a href="~/appraisalsummary"><i class="fa fa-link"></i> <span>Appraisal</span></a></li>
+    }
+    if (isSupervisor)
+    {
+        <li class="header">SUPERVISOR</li>
+        <!-- Optionally, you can add icons to the links -->
+        <li class="@ViewBag.Mystaff"><a href="~/mystaff"><i class="fa fa-link"></i> <span>My Staff</span></a></li>
+        <li class="@ViewBag.Stafftask"><a href="~/mystaff/tasks"><i class="fa fa-link"></i> <span>Staff Task</span></a></li>
+        <li class="@ViewBag.Assignedtask"><a href="~/supervisor/unacceptedtasks"><i class="fa fa-link"></i> <span>Assigned Task</span></a></li>
+    }
+    if (isHOD)
+    {
+        <li class="header">Head of Department</li>
+        <!-- Optionally, you can add icons to the links -->
+        <li class="@ViewBag.D_competencies"><a href="~/@deptName/dimensions"><i class="fa fa-link"></i> <span>Competencies</span></a></li>
+        <li class="@ViewBag.D_cluster"><a href="~/cluster/@deptName"><i class="fa fa-link"></i> <span>Cluster</span></a></li>
+        <li class="@ViewBag.D_contest"><a href="~/hod/contest"><i class="fa fa-link"></i> <span>Appraisal Contest</span></a></li>
+    }
+    if (isPMA)
+    {
+        <li class="header">Performance Manager</li>
+        <!-- Optionally, you can add icons to the links -->
+        <li class="@ViewBag.Allstaff"><a href="~/pm/search"><i class="fa fa-link"></i> <span>All Staff</span></a></li>
+        <li class="@ViewBag.Departments"><a href="~/pm/department"><i class="fa fa-link"></i> <span>Departments</span></a></li>
+        <li class="treeview @ViewBag.Appraisalsettings">
+        <a href="#"><i class="fa fa-link"></i> <span>Appraisal Settings</span> <i class="fa fa-angle-left pull-right"></i></a>
+        <ul class="treeview-menu">
+            <li class="@ViewBag.A_appraisalcycles"><a href="~/pm/appraisalcycle"><i class="fa fa-circle-o"></i> Appraisal Cycles</a></li>
+            <li class="@ViewBag.A_appraisalformat"><a href="~/pm/format"><i class="fa fa-circle-o"></i> Appraisal Format</a></li>
+            <li class="@ViewBag.A_recommendations"><a href="~/pm/recommendation"><i class="fa fa-circle-o"></i> Recommendations</a></li>
+            <li class="@ViewBag.A_competencies"><a href="~/pm/dimension"><i class="fa fa-circle-o"></i> Competencies</a></li>
+        </ul>
+    </li>
+        <li class="treeview @ViewBag.Reports">
+            <a href="#"><i class="fa fa-link"></i> <span>Reports</span> <i class="fa fa-angle-left pull-right"></i></a>
+            <ul class="treeview-menu">
+                <li class="@ViewBag.R_staffreport"><a href="~/report/staff"><i class="fa fa-circle-o"></i> Staff Report</a></li>
+                <li class="@ViewBag.R_appraisalcontests"><a href="~/report/contest"><i class="fa fa-circle-o"></i> Appraisal Contests</a></li>
+                <li class="@ViewBag.R_departmentcluster"><a href="~/cluster"><i class="fa fa-circle-o"></i> Department Cluster</a></li>
+                <li class="@ViewBag.R_recommendationreport"><a href="~/report/recommendations"><i class="fa fa-circle-o"></i> Recommendation Report</a></li>
+            </ul>
+        </li>
+        <li><a href="~/pm/objectives"><i class="fa fa-link"></i> <span>Objectives</span></a></li>
+    <li><a href="~/pm/goals"><i class="fa fa-link"></i> <span>Goals</span></a></li>
+    }
+    if (isITA)
+    {
+        <li class="header">IT Admin</li>
+        <!-- Optionally, you can add icons to the links -->
+        <li class="@ViewBag.I_departments"><a href="~/itadmin/department"><i class="fa fa-link"></i> <span>Departments</span></a></li>
+        <li class="@ViewBag.I_priviledges"><a href="#"><i class="fa fa-link"></i> <span>Privileges</span></a></li>
+    }
+    if (isMachine)
+    {
+        <li class="header">@User.Identity.GetUserOrganizationShortname().ToUpper() Admin</li>
+        <!-- Optionally, you can add icons to the links -->
+        <li class="@ViewBag.M_departmentsettings"><a href="~/admin/department"><i class="fa fa-link"></i> <span>Department Settings</span></a></li>
+        <li class="@ViewBag.M_staffstatus"><a href="~/admin/status"><i class="fa fa-link"></i> <span>Staff Status</span></a></li>
+        <li class="@ViewBag.M_staffpriviledges"><a href="~/admin/privileges"><i class="fa fa-link"></i> <span>Staff Privileges</span></a></li>
+        <li class="header">Appraisal Settings</li>
+        <li class="@ViewBag.M_timeframe"><a href="~/admin/appraisalsettings"><i class="fa fa-link"></i> <span>Time-Frame Settings</span></a></li>
+    }
+}
+

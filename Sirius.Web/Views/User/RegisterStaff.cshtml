@@ -1,0 +1,65 @@
+﻿@model Sirius.Web.Models.RegisterStaffViewModel
+
+@{
+    ViewBag.Title = "RegisterStaff";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="col-md-offset-2 col-md-8">
+        <div class="box box-solid">
+            <div class="box-body bg-purple">
+                <div class="row">
+                    <div class="col-md-2">
+                        <span class="pull-right"><i class="fa fa-smile-o fa-5x" style="color:white;"></i></span>
+                    </div>
+                    <div class="col-md-10">
+                        <p style="font-size:35px;">Hi, @Model.FullName</p>
+                        <h4>Welcome to Sirius.ly</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="box box-solid">
+            <div class="box-header text-center">
+                <h2 class="box-title"><b>You're almost there!</b><br><br>Change your password and Confirm your details to setup your sirius account</h2>
+            </div>
+        </div>
+        <div class="box box-solid">
+            <div class="box-body">
+                <div class="col-md-offset-2 col-md-8">
+                    @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(m => m.Email)
+                        @Html.HiddenFor(m => m.StaffID)
+                        @Html.HiddenFor(m => m.FullName)
+
+                        <div class="form-group">
+                            <label>Password: <small class="text-muted">(required)</small></label>
+                            @Html.PasswordFor(m => m.Password, new { @class = "form-control", @placeholder = "********" })
+                            @Html.ValidationMessageFor(m => m.Password, null, new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group">
+                            <label>Confirm Password: <small class="text-muted">(required)</small></label>
+                            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", @placeholder = "********" })
+                            @Html.ValidationMessageFor(m => m.ConfirmPassword, null, new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group">
+                            <label>Confirm Your Status: <small class="text-muted">(required)</small></label>
+                            @Html.DropDownListFor(m => m.StaffStatusId, new SelectList(Model.StaffStatuses, "Value", "Text", 0), new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.StaffStatusId, null, new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group">
+                            <label>Confirm Your Department: <small class="text-muted">(required)</small></label>
+                            @Html.DropDownListFor(m => m.DepartmentId, new SelectList(Model.Departments, "Value", "Text", 0), new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.DepartmentId, null, new { @class = "text-danger" })
+                        </div>
+                        <button type="submit" class="btn bg-purple btn-flat btn-block"><b>SETUP ACCOUNT</b></button>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

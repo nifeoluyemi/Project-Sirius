@@ -1,0 +1,350 @@
+﻿@model Sirius.Web.Models.AppraisalSettingsViewModel
+
+@section styles{
+    @Styles.Render("~/toastr/css")
+    @Styles.Render("~/iCheck/css")
+    @Styles.Render("~/datepicker/css")
+}
+
+@{
+    ViewBag.Title = "AppraisalSettings";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+    ViewBag.Active = "m_timeframe";
+}
+<div class="row">
+    <div class="col-md-3">
+        @Html.HiddenFor(m => m.IsUpdate, new { id = "isUpdate" })
+        <div class="small-box bg-aqua">
+            <div class="small-box-footer">
+                Current Cycle
+            </div>
+            <div class="inner text-center">
+                <h3>@Model.DaysRemaining</h3>
+                <p>Days remaining in this cycle.</p>
+            </div>
+        </div>
+
+        <div class="small-box bg-aqua">
+            <div class="small-box-footer">
+                @Model.OrganizationName
+            </div>
+            <div class="inner text-center">
+                <h3 id="cycleCount"></h3>
+                <p>Appraisal cycles</p>
+            </div>
+            <a href="~/performancecycles" class="small-box-footer">
+                View list
+            </a>
+        </div>
+    </div>
+    <div class="col-md-7">
+        @if (Model.IsUpdate)
+        {
+            <div class="box box-solid">
+                <div class="box-header with-border">
+                    <h2 class="box-title">Renew Appraisal Settings</h2>
+                </div>
+                <div class="box-body">
+                    <div class="col-md-6">
+                        <a id="renewButton" href="#" data-href="@Model.RenewUrl" class="btn btn-block btn-primary">Renew with same settings</a>
+                    </div>
+                    <div class="col-md-6">
+                        <a id="renewDifferentButton" href="#" data-href="" class="btn btn-block btn-warning">Renew with different settings</a>
+                    </div>
+                </div>
+            </div>
+        }
+        <div id="settings-body">
+
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    @Scripts.Render("~/toastr/js")
+    @Scripts.Render("~/iCheck/js")
+    @Scripts.Render("~/datepicker/js")
+
+    <script type="text/javascript">
+    $(document).ready(function () {
+        var IsUpdate = $("#isUpdate").val();
+        if (IsUpdate == "False") {
+            loadCycleSettings(false);
+        }
+
+        
+        $(document).on("change", "input[type=radio][name=durationOptions]", function () {
+            var duration = $(this).val();
+            $("#date-validation").html('');
+            //check date if is update
+            var isUpdate = $("#isUpdate").val();
+            if (isUpdate == "False") {
+                var startDate = $('#startDate').val();
+                if ($.trim(startDate).length == 0) {
+                    $("#date-validation").append('You need to pick a start date.');
+                }
+                else {
+                    loadPeriodSettings(duration);
+                    $("#date-validation").html('');
+                }
+            }
+            else {
+                loadPeriodSettings(duration);
+            }
+            
+            setTimeout(function () {
+                $("#savechanges-body").html('');
+            }, 1000);
+        });
+
+        $("#renewButton").click(function () {
+            var previewUrl = $(this).attr('data-href');
+            $.ajax({
+                url: previewUrl,
+                contentType: 'application/html; charset=utf-8',
+                dataType: "html",
+                type: "GET",
+                cache: false,
+                tryCount: 0,
+                retryLimit: 3,
+                beforeSend: function () {
+                    $('#settings-body').html('<div class="box box-solid"><div class="box-body"><div class="col-md-12" style="height:50px;"><div class="overlay"><i class="fa fa-refresh fa-spin"></i></div></div></div></div>');
+                },
+                success: function (data) {
+                    $('#settings-body').html('<div class="box box-solid"><div class="box-header with-border"><h2 class="box-title">Preview</h2></div><div class="box-body">' + data + '</div></div>');
+                },
+                error: function () {
+                    this.tryCount++;
+                    if (this.tryCount <= this.retryLimit) {
+                        //try again
+                        $.ajax(this);
+                        return;
+                    }
+                    else {
+                        $('#settings-body').html('<div class="box box-solid"><div class="box-body"><div class="col-md-12"><h4>An error occured, please reload this page.</h4></div></div></div>');
+                    }
+                }
+            });
+        });
+
+        $("#renewDifferentButton").click(function () {
+            loadCycleSettings(true);
+        });
+
+        $.ajax({
+            url: '@Url.Action("AppraisalCycleInfo", "Staff")',
+            contentType: 'application/html; charset=utf-8',
+            dataType: "html",
+            type: "GET",
+            cache: false,
+            tryCount: 0,
+            retryLimit: 3,
+            beforeSend: function () {
+                $('#cycleInfo-Body').html('<div class="overlay" style="height:50px;"><i class="fa fa-refresh fa-spin"></i></div>');
+            },
+            success: function (data) {
+                $('#cycleInfo-Body').html(data);
+            },
+            error: function () {
+                this.tryCount++;
+                if (this.tryCount <= this.retryLimit) {
+                    //try again
+                    $.ajax(this);
+                    return;
+                }
+                else {
+                    $('#cycleInfo-Body').html('<h4>An error occured, please reload this page.</h4>');
+                }
+            }
+        });
+
+        $(document).on("click", "#applyChanges-Button", function () {
+            var frequency = $("#periodFrequency").val();
+            var span = $("#periodDuration").val();
+            var cycleDuration = $("#appraisalCycleDuration").val();
+            if (IsUpdate) {
+                loadPreview(cycleDuration, frequency, span, "");
+            }
+            else {
+                var startDate = $('#startDate').val();
+                loadPreview(cycleDuration, periodFrequency, periodSpan, startDate);
+            }
+        });
+
+        $(document).on("click", "a#saveSettings-Button", function () {
+            var $thisButton = $(this);
+            var saveUrl = $(this).attr('data-href');
+            $.ajax({
+                url: saveUrl,
+                dataType: "json",
+                type: "POST",
+                beforeSend: function () {
+                    $thisButton.attr('disabled', 'disabled');
+                },
+                success: function (data) {
+                    if (data.Successful) {
+                        toastr.success(data.Html);
+                        setTimeout(function () {
+                            window.location.reload(true);
+                        }, 2000);
+                    }
+                    else {
+                        toastr.error(data.Html);
+                        $thisButton.removeAttr('disabled');
+                    }
+                },
+                error: function () {
+                    toastr.error("An error occured while processing your request, Please Try Again");
+                }
+            });
+        });
+    });
+
+    $(function () {
+        var action;
+        $(document).on("mousedown", ".number-spinner button", function () {
+            btn = $(this);
+            input = btn.closest('.number-spinner').find('input');
+            btn.closest('.number-spinner').find('button').prop("disabled", false);
+
+            if (btn.attr('data-dir') == 'up') {
+                action = setInterval(function () {
+                    if (input.attr('max') == undefined || parseInt(input.val()) < parseInt(input.attr('max'))) {
+                        input.val(parseInt(input.val()) + 1);
+                    } else {
+                        btn.prop("disabled", true);
+                        clearInterval(action);
+                    }
+                }, 50);
+            } else {
+                action = setInterval(function () {
+                    if (input.attr('min') == undefined || parseInt(input.val()) > parseInt(input.attr('min'))) {
+                        input.val(parseInt(input.val()) - 1);
+                    } else {
+                        btn.prop("disabled", true);
+                        clearInterval(action);
+                    }
+                }, 50);
+            }
+        }).mouseup(function () {
+            clearInterval(action);
+        });
+    });
+
+
+    function loadCycleSettings(isUpdate) {
+        var url = '@Url.Action("CycleSettings", "Admin")' + '?isUpdate=' + isUpdate;
+        $.ajax({
+            url: url,
+            contentType: 'application/html; charset=utf-8',
+            dataType: "html",
+            type: "GET",
+            cache: false,
+            tryCount: 0,
+            retryLimit: 3,
+            beforeSend: function () {
+                $('#settings-body').html('<div class="box box-solid"><div class="box-body"><div class="col-md-12" style="height:50px;"><div class="overlay"><i class="fa fa-refresh fa-spin"></i></div></div></div></div>');
+            },
+            success: function (data) {
+                $('#settings-body').html(data);
+                if (isUpdate) {
+                    var cycleDuration = $("#selectedDurationOption").val();
+                    loadPeriodSettings(cycleDuration);
+                }
+                else {
+                    $('#startDate').datepicker();
+                }
+            },
+            error: function () {
+                this.tryCount++;
+                if (this.tryCount <= this.retryLimit) {
+                    //try again
+                    $.ajax(this);
+                    return;
+                }
+                else {
+                    $('#settings-body').html('<div class="box box-solid"><div class="box-body"><div class="col-md-12"><h4>An error occured, please reload this page.</h4></div></div></div>');
+                }
+            }
+        });
+    }
+
+    function loadPeriodSettings(cycleDuration) {
+        var periodUrl = '@Url.Action("PeriodSettings", "Admin")' + '?cycleDuration=' + cycleDuration;
+            $.ajax({
+                url: periodUrl,
+                contentType: 'application/html; charset=utf-8',
+                dataType: "html",
+                type: "GET",
+                cache: false,
+                tryCount: 0,
+                retryLimit: 3,
+                beforeSend: function () {
+                    $('#periodSettings-body').html('<div class="box-body"><div class="col-md-12" style="height:50px;"><div class="overlay"><i class="fa fa-refresh fa-spin"></i></div></div></div>');
+                },
+                success: function (data) {
+                    $('#periodSettings-body').html(data);
+                },
+                error: function () {
+                    this.tryCount++;
+                    if (this.tryCount <= this.retryLimit) {
+                        //try again
+                        $.ajax(this);
+                        return;
+                    }
+                    else {
+                        $('#periodSettings-body').html('<div class="box-body"><div class="col-md-12"><h4>An error occured, please reload this page.</h4></div></div>');
+                    }
+                }
+            });
+        }
+
+        function loadPreview(cycleDuration, periodFrequency, periodSpan, date) {
+            var previewUrl = '';
+            var IsUpdate = $("#isUpdate").val();
+            if (IsUpdate == "False") {
+                var startDate = $('#startDate').val();
+                previewUrl = '@Url.Action("PreviewSettings", "Admin")' + '?cycleDuration=' + cycleDuration + '&periodFrequency=' + periodFrequency + '&periodSpan=' + periodSpan + '&date=' + startDate;
+            }
+            else {
+                previewUrl = '@Url.Action("PreviewSettings", "Admin")' + '?cycleDuration=' + cycleDuration + '&periodFrequency=' + periodFrequency + '&periodSpan=' + periodSpan + '&date=' + date;
+            }
+            $.ajax({
+                url: previewUrl,
+                contentType: 'application/html; charset=utf-8',
+                dataType: "html",
+                type: "GET",
+                cache: false,
+                tryCount: 0,
+                retryLimit: 3,
+                beforeSend: function () {
+                    $('#savechanges-body').html('<div class="col-md-12" style="height:50px;"><div class="overlay"><i class="fa fa-refresh fa-spin"></i></div></div>');
+                },
+                success: function (data) {
+                    $('#savechanges-body').html(data);
+                },
+                error: function () {
+                    this.tryCount++;
+                    if (this.tryCount <= this.retryLimit) {
+                        //try again
+                        $.ajax(this);
+                        return;
+                    }
+                    else {
+                        $('#savechanges-body').html('<div class="col-md-12"><h4>An error occured, please reload this page.</h4></div>');
+                    }
+                }
+            });
+        }
+
+        function drawICheck() {
+            $('input[type="radio"].flat-red').iCheck({
+                checkboxClass: 'icheckbox_flat-purple',
+                radioClass: 'iradio_flat-purple'
+            });
+        }
+
+        
+    </script>
+}
+

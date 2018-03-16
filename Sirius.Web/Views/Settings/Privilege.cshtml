@@ -1,0 +1,123 @@
+﻿@model Sirius.Web.Models.PrivilegeSettingsViewModel
+@using Sirius.Web.Infrastructure.Constants
+@{
+    ViewBag.Title = "Privilege";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+<div class="row">
+    @{ Html.RenderAction("SettingsPartial"); }
+
+    <div class="col-md-6">
+        <div class="box box-solid">
+            <div class="box-header with-border">
+                <h2 class="box-title">Privilege</h2>
+                <p class="text-muted">Request for account privileges</p>
+            </div>
+
+            <div class="box-body">
+                <h4>Your current privileges</h4>
+                <h4>
+                    @if (User.Identity.IsUserInRole(SiriusRoles.USER))
+                    {
+                        <span class="label label-primary">Staff</span> 
+                    } 
+                    @if (User.Identity.IsUserInRole(SiriusRoles.SUPERVISOR))
+                    {
+                        <span class="label label-primary">Supervisor</span> 
+                    } 
+                    @if (User.Identity.IsUserInRole(SiriusRoles.HOD))
+                    {
+                        <span class="label label-primary">H.O.D.</span> 
+                    } 
+                    @if (User.Identity.IsUserInRole(SiriusRoles.PMA))
+                    {
+                        <span class="label label-primary">PM Admin</span> 
+                    } 
+                    @if (User.Identity.IsUserInRole(SiriusRoles.ITA))
+                    {
+                        <span class="label label-primary">IT Admin</span> 
+                    } 
+                </h4>
+            </div>
+
+            <hr>
+
+            <div class="box-body">
+                <h4>Request privilege for:</h4>
+                <br>
+                @if (!User.Identity.IsUserInRole(SiriusRoles.SUPERVISOR))
+                {
+                    if (Model.HasSupervisorRequest)
+                    {
+                        <div class="col-md-12">
+                            <a href="#" id="privilegeRequest-Button" class="btn btn-primary" disabled>Supervisor</a>
+                            <p> </p>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-md-12">
+                            <a href="#" id="privilegeRequest-Button" class="btn btn-primary">Supervisor</a>
+                            <p> </p>
+                        </div>
+                    }
+                }
+                @if (!User.Identity.IsUserInRole(SiriusRoles.HOD))
+                {
+                    if (Model.HasHODRequest)
+                    {
+                        <div class="col-md-12">
+                            <a href="#" id="privilegeRequest-Button" class="btn btn-primary">Head of Department</a>
+                            <p> </p>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-md-12">
+                            <a href="#" id="privilegeRequest-Button" class="btn btn-primary">Head of Department</a>
+                            <p> </p>
+                        </div>
+                    }
+                }
+                @if (!User.Identity.IsUserInRole(SiriusRoles.PMA))
+                {
+                    if (Model.HasPMAdminRequest)
+                    {
+                        <div class="col-md-12">
+                            <a href="#" id="privilegeRequest-Button" class="btn btn-primary">PM Admin</a>
+                            <p> </p>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-md-12">
+                            <a href="#" id="privilegeRequest-Button" class="btn btn-primary">PM Admin</a>
+                            <p> </p>
+                        </div>
+                    }
+                }
+                @if (!User.Identity.IsUserInRole(SiriusRoles.ITA))
+                {
+                    if (Model.HasITAdminRequest)
+                    {
+                        <div class="col-md-12">
+                            <a href="#" id="privilegeRequest-Button" class="btn btn-primary">IT Admin</a>
+                            <p> </p>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-md-12">
+                            <a href="#" id="privilegeRequest-Button" class="btn btn-primary">IT Admin</a>
+                            <p> </p>
+                        </div>
+                    }
+                }
+            </div>
+            <hr>
+            <div class="box-body" id="requestList-Body">
+            </div>
+        </div>
+    </div>
+</div>

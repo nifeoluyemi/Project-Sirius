@@ -1,0 +1,51 @@
+﻿@model IEnumerable<Sirius.Services.DTO.UserDTO>
+@using Sirius.Web.Infrastructure.Constants
+
+@{
+    int resultCount = (int)ViewBag.count;
+}
+
+@if (resultCount > 0)
+{
+    if (resultCount == 1)
+    {
+        <p class="lead">1 result</p>
+    }
+    else
+    {
+        <p class="lead">@resultCount results</p>
+    }
+}
+
+@foreach (var user in Model)
+{
+    <div class="box box-warning">
+        <div class="box-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="image">
+                        <a href="#"><img src="@Url.Action("GetUserIdAvatar", "Base", new { userId = user.UserId })" class="img-circle img-responsive" alt="User Image" height="140" style="border:3px solid gray;"></a>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <a href="#" style="color:#000;"><h2 class="lead">@user.FullName</h2></a>
+                    <p>
+                        @user.DepartmentName
+                    </p>
+                        <h4>
+                           <span class="label label-warning">@user.StatusShortName</span>
+                        </h4> <!--Statuses is in Enumerable. Change to status text-->
+                    <h4> <span class="label label-primary"><strong>Supervisor:</strong></span>  @user.SupervisorFullName</h4>
+
+                </div>
+                <div class="col-md-3">
+                    @if (!user.Roles.Contains(SiriusRoles.SUPERVISOR))
+                    {
+                        <a id="addAsSupervisor" data-firstname="@user.FirstName" data-href="@Url.Action("AssignSupervisor", "PM", new { userId = user.UserId })" class="btn btn-flat btn-info">Add as Supervisor</a>
+                    }
+                </div>
+            </div>
+        </div><!-- /.box-body -->
+    </div><!--/.box -->
+
+}

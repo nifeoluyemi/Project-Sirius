@@ -1,0 +1,57 @@
+﻿@model Sirius.Web.Models.GoalViewModel
+
+<div class="col-md-3">
+    <!-- small box -->
+    <div class="small-box bg-navy">
+        <div class="inner">
+            <h3>@Model.GoalCount</h3>
+            <p>Goals</p>
+        </div>
+        <div class="icon">
+            <a data-toggle="modal" href="#addGoal"><i class="fa fa-plus"></i></a>
+        </div>
+        <a href="#" class="small-box-footer">
+            Add Goal <i class="fa fa-arrow-circle-right"></i>
+        </a>
+    </div>
+
+    <div class="box box-solid">
+        <div class="box-header with-border">
+            <h3 class="box-title">@User.Identity.GetUserOrganizationShortname().ToUpper() Goals</h3>
+            <div class="box-tools">
+                <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+            </div>
+        </div>
+
+        @if (Model.GoalCount == 0)
+        {
+            <div class="box-body">
+                <p>There are no organization goals for @User.Identity.GetUserOrganizationShortname().ToUpper()</p>
+            </div>
+        }
+        else
+        {
+            <div class="box-body">
+                <table class="table table-hover no-border">
+                    <tbody>
+                        @foreach (var goal in Model.Goals)
+                        {
+                            <tr>
+                                <td>
+                                    <h4>@goal.Goal</h4>
+                                </td>
+                                <td class="pull-right">
+                                    <button class="btn btn-warning"><i class="fa fa-edit"></i></button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div><!-- /.box-body -->
+            <div class="box-footer text-center">
+                <a href="~/pm/goals">View all Goals</a>
+            </div>
+        }
+    </div>
+</div>

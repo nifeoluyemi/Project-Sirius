@@ -1,0 +1,56 @@
+﻿@model Sirius.Web.Models.SignUpViewModel
+
+<div class="col-md-offset-1 col-md-10 register-box">
+    <h1> </h1>
+
+    <div class="text-center">
+
+        <h1>Register</h1>
+        <h5>Have an account? <a href="~/user/login">Sign in Here</a></h5>
+        <br>
+    </div>
+    @using (Ajax.BeginForm("SignUp", "User", new AjaxOptions()
+        {
+            OnBegin = "onBegin",
+            OnComplete = "onComplete",
+            OnFailure = "onFailure",
+            OnSuccess = "onSuccess",
+            HttpMethod = "Post",
+            InsertionMode = System.Web.Mvc.Ajax.InsertionMode.Replace
+        }))
+    {
+        <div class="form-group">
+            @Html.AntiForgeryToken()
+            <label>Your name: <small class="text-muted">(required)</small> <span class="pull-right">@Html.ValidationMessageFor(m => m.FirstName, null, new { @class = "text-danger" })</span></label>
+            @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control input-lg", @placeholder = "Firstname", autocomplete = "off" })
+            @Html.TextBoxFor(m => m.LastName, new { @class = "form-control input-lg", @placeholder = "Lastname", autocomplete = "off" })
+            @Html.ValidationMessageFor(m => m.LastName, null, new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group has-feedback">
+            <label>Your @Model.OrganizationName.ToUpper() Email: <small class="text-muted">(required)</small></label>
+            <span class="glyphicon glyphicon-user form-control-feedback"></span>
+            @Html.TextBoxFor(m => m.Email, new { id = "email-input", @class = "form-control input-lg", @placeholder = "Email", autocomplete = "off" })
+            @Html.ValidationMessageFor(m => m.Email, null, new { id = "OrgEmailValidation", @class = "text-danger" })
+        </div>
+        <div class="form-group has-feedback">
+            <label>Password: <small class="text-muted">(required)</small></label>
+            <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+            @Html.PasswordFor(m => m.Password, new { id = "password", @class = "form-control input-lg", @placeholder = "Password" })
+            @Html.ValidationMessageFor(m => m.Password, null, new { @class = "text-danger", id = "password-Validation" })
+        </div>
+        <div class="form-group has-feedback">
+            @Html.HiddenFor(m => m.OrganizationId, new { id = "organizationId" })
+            <label>Retype Password: <small class="text-muted">(required)</small></label>
+            <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+            @Html.PasswordFor(m => m.ConfirmPassword, new { id = "confirmPassword", @class = "form-control input-lg", @placeholder = "Retype Password" })
+            @Html.ValidationMessageFor(m => m.ConfirmPassword, null, new { @class = "text-danger", id = "cPassword-Validation" })
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <br>
+                <a id="registerButton" href="#" class="btn bg-purple btn-block btn-lg btn-flat">Register</a>
+            </div>
+        </div>
+    }
+</div>

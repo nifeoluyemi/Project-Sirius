@@ -1,0 +1,107 @@
+﻿<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>SiriusPM | @ViewBag.Title</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    @Styles.Render("~/Template/bootstrap")
+    @Styles.Render("~/Template/gencss")
+    @Styles.Render("~/Template/maincss")
+    @Scripts.Render("~/bundles/modernizr")
+    @RenderSection("styles", required: false)
+</head>
+
+<body class="hold-transition skin-purple sidebar-mini">
+    <div class="wrapper">
+        <header class="main-header">
+            <a href="#" class="logo">
+                <!-- mini logo for sidebar mini 50x50 pixels -->
+                <span class="logo-mini"><b>S</b>PM</span>
+                <span class="logo-lg"><b>Sirius</b>PM</span>
+            </a>
+            <nav class="navbar navbar-static-top" role="navigation">
+                <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                </a>
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
+                        <li class="dropdown notifications-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="modal" data-target="#notifications" id="seen-notification">
+                                <i class="fa fa-bell-o"></i>
+                                <span class="label label-warning n_count"></span>
+                            </a>
+                        </li>
+                        <li class="dropdown user user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <span class="hidden-xs">Hi, @User.Identity.GetUserFirstname() <i class="fa fa-angle-down"></i></span>
+                            </a>
+                            <ul class="dropdown-menu" id="sidebarLinks">
+                                @Html.Partial("_ProfilePartial")
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="~/support" data-toggle="control-sidebar"><i class="fa fa-bank"></i></a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <aside class="main-sidebar">
+            <section class="sidebar">
+                <div class="user-panel">
+                    <div class="pull-left image">
+                        <img src="@Url.Action("GetUserAvatar", "Base", new { username = User.Identity.Name })" class="img-circle" alt="User Image">
+                    </div>
+                    <div class="pull-left info">
+                        <p><a href="~/profile">@User.Identity.GetUserFullname()</a></p>
+                    </div>
+                </div>
+                <!-- Sidebar Menu -->
+                <ul class="sidebar-menu">
+                    @Html.Partial("_LeftSidebarPartial")
+                </ul>
+            </section>
+        </aside>
+        <div class="content-wrapper">
+            <section class="content-header">
+                <h1>
+                    @ViewBag.PageHeader
+                    <small>@ViewBag.PageDescription</small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                    <li class="active">Here</li>
+                </ol>
+            </section>
+            <section class="content">
+                @RenderBody()
+            </section>
+        </div>
+        <footer class="main-footer">
+            <div class="pull-right hidden-xs">
+                <b>Made with <i class="fa fa-heart text-danger"></i> for your office.</b>
+            </div>
+            <strong>Copyright &copy; 2016 <a href="#">GeekCampStudios</a>.</strong> All rights reserved.
+        </footer>
+        <div class="control-sidebar-bg"></div>
+    </div>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/unobtrusive-ajax")
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/jqueryvalmin")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/Template/main-js")
+    @Scripts.Render("~/angular/js")
+    <script type="text/javascript">
+        $('[data-toggle="tooltip"]').tooltip();
+
+        $(function () {
+            var page = location.pathname;
+            $('#sidebarLinks li a[href="~' + page + '"]').closest('li').addClass('active')
+        });
+    </script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

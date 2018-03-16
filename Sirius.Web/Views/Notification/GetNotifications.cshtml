@@ -1,0 +1,25 @@
+﻿@model List<Sirius.Services.DTO.NotificationDTO>
+
+@if (Model.Count > 0)
+{
+    foreach (var notification in Model)
+    {
+        if (notification.NotificationState == Sirius.Entity.Enums.NotificationState.Read)
+        {
+            <li>
+                <a>
+                    <i class="fa @notification.FontAwesome"></i> @notification.Message
+                </a>
+            </li>
+        }
+        else
+        {
+            <li>
+                <a id="read-notification" data-href="@Url.Action("MarkAsRead", "Notification", new { notificationId = notification.NotificationId})">
+                    <i class="fa @notification.FontAwesome"></i> @notification.Message
+                </a>
+            </li>
+        }
+    }
+}
+

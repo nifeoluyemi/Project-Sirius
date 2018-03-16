@@ -1,0 +1,46 @@
+﻿@model string
+@{
+    ViewBag.Title = "Enter";
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+}
+
+<div class="login-box col-lg-9">
+    <div class="center-box login-box-body" style="border-radius:2px;">
+        <form class="text-center">
+            <div class="input-group">
+                @Html.Hidden(Model, ViewBag.ReturnURL as string, new { id = "returnUrl" })
+                <span class="shortname-input input-group-addon"><i class="fa fa-bank fa-fw fa-2x"></i></span>
+                @Html.TextBox("shortname", ViewBag.ShortName as string, new { id = "shortname", @class = "shortname-input form-control input-lg", @placeholder = "What's the name of your Company" })
+                <span class="input-group-btn"><a id="enterLink" class="btn btn-lg btn-success btn-flat">ENTER</a></span>
+            </div>
+            <div id="status" class="status-text"></div>
+        </form>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        $('#enterLink').click(function (event) {
+            var Shortname = $('#shortname').val();
+            var ReturnURL = $('#returnUrl').val();
+            var urlToCheck = '/api/organizationapi/organizationexist?shortname=' + Shortname;
+            if (Shortname.length > 1) {
+                //loading result
+                $.ajax({
+                    url: urlToCheck,
+                    dataType: "json",
+                    type: "POST",
+                    success: function (data) {
+                        if (data == true) {
+                            //shortname exists
+                            window.location.href = '/' + Shortname + '/' + ReturnURL;
+                        } else {
+                        }
+                    }
+                });
+            } else if (Shortname.length == 0) {
+            } else {
+            }
+        });
+    </script>
+}

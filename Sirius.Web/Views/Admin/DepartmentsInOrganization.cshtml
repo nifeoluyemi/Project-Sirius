@@ -1,0 +1,54 @@
+﻿@model IEnumerable<Sirius.Services.DTO.DepartmentDTO>
+
+@{
+    int j = 1;
+}
+
+@if (Model.Count() == 0)
+{
+    <div class="callout callout-info">
+        <h4>There are no departments in @User.Identity.GetUserOrganizationShortname().ToUpper()</h4>
+    </div>
+}
+else
+{
+    <table class="table table-striped" id="deptlist">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Name</th>
+                <th>Short Name</th>
+                <th>Head Of Department</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var dept in Model)
+            {
+                <tr>
+                    <td><span class="label label-success">@(j++)</span></td>
+                    <td>@dept.DepartmentName</td>
+                    <td>@dept.ShortName</td>
+                    <td>
+                        @if (dept.HasHOD)
+                        {
+                            @dept.HeadOfDepartment
+                        }
+                    </td>
+                    <td>
+                        <a class="btn btn-warning btn-xs" data-toggle="modal" href="#deptModal_@dept.ShortName" id="updateDepartment"><i class="fa fa-edit"></i></a>
+                        <a href="#" data-href="@Url.Action("RemoveDepartment", "Admin", new { departmentId = dept.DepartmentId })" id="deleteDept" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    foreach (var dept in Model)
+    {
+        <div class="modal fade" id="deptModal_@dept.ShortName" role="dialog">
+            <div class="modal-dialog">
+                @{ Html.RenderAction("UpdateDepartment", "Admin", new { departmentId = dept.DepartmentId }); }
+            </div>
+        </div>
+    }
+}

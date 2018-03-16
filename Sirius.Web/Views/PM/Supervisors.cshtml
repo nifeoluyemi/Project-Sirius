@@ -1,0 +1,24 @@
+﻿@model IEnumerable<Sirius.Services.DTO.UserDTO>
+
+<!-- SUPERVISOR LIST -->
+<div class="box box-danger">
+    <div class="box-header with-border">
+        <h3 class="box-title">Supervisors</h3>
+        <div class="box-tools pull-right">
+            <span class="label label-danger">@ViewBag.count Supervisors</span>
+            <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+        </div>
+    </div><!-- /.box-header -->
+    <div class="box-body no-padding">
+        <ul class="users-list clearfix">
+            @foreach (var supervisor in Model)
+            {
+                <li>
+                    <img src="@Url.Action("GetUserIdAvatar", "Base", new { userId = supervisor.UserId })" alt="User Image">
+                    <a class="users-list-name" href="#">@supervisor.FullName</a>
+                </li>
+            }
+            
+        </ul><!-- /.users-list -->
+    </div><!-- /.box-body -->
+</div><!--/.box -->

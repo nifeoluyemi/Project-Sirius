@@ -1,0 +1,56 @@
+﻿@model IEnumerable<Sirius.Services.DTO.AppraisalCycleDTO>
+
+@{
+    int j = 1;
+}
+<div class="box">
+    <div class="box-header with-border">
+        <h3 class="box-title"><b>Appraisal Cycles</b></h3>
+    </div>
+
+    <div class="box-body">
+        @if (Model.Count() == 0)
+        {
+            <div class="callout callout-info">
+                <h4>No appraisal periods yet.</h4>
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table no-margin">
+                    <thead>
+                        <tr>
+                            <th>S/No</th>
+                            <th>Begin Date</th>
+                            <th>End Date</th>
+                            <th>Status</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var appraisalCycle in Model)
+                        {
+                            <tr>
+                                <td>@(j++).</td>
+                                <td>@appraisalCycle.DateBegin</td>
+                                <td>@appraisalCycle.DateEnd</td>
+                                <td>
+                                    @if (appraisalCycle.Status)
+                                    {
+                                        <span class="label label-success">Active</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="label label-default">Inactive</span>
+                                    }
+                                </td>
+                                <td><a href="#" class="btn btn-default btn-flat btn-xs">View Details</a></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div><!-- /.table-responsive -->
+        }
+    </div>
+</div>

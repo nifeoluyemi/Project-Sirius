@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - SiriusPM</title>
+    @Styles.Render("~/Template/bootstrap")
+    @Styles.Render("~/Template/gencss")
+
+    @RenderSection("styles", required: false)
+</head>
+<body>
+
+    <h2 class="container"><a href="" style="color:#000;"><b>Sirius</b>PM</a></h2>
+
+        @RenderBody()
+
+    <footer class="footer container">
+        <!-- To the right -->
+        <div class="pull-right hidden-xs">
+            <b>Version</b> 0.1.0
+        </div>
+        <!-- Default to the left -->
+        <strong>Copyright &copy; 2015 <a href="#">GeekCampStudios</a>.</strong> All rights reserved.
+
+        <hr>
+    </footer>
+</body>
+
+
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/jqueryvalmin")
+@Scripts.Render("~/bundles/unobtrusive-ajax")
+@Scripts.Render("~/bundles/bootstrap")
+@RenderSection("scripts", required: false)
+
+</html>

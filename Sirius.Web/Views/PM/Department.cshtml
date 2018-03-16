@@ -1,0 +1,85 @@
+﻿@model IEnumerable<Sirius.Services.DTO.DepartmentDTO>
+
+@{
+    ViewBag.Title = "Department";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+    ViewBag.Active = "departments";
+}
+
+<div class="box box-solid">
+    <div class="box-body">
+        <form class="form-horizontal">
+            <div class="col-md-6 col-md-offset-6">
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-search"></i>
+                    </div>
+                    <input id="searchInput" type="text" class="form-control input-lg" placeholder="Search...">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="box box-solid">
+    <div class="box-body">
+        @if (Model.Count() > 0)
+        {
+            foreach (var department in Model)
+            {
+                <div class="data-div">
+                    <input hidden="hidden" id="deptName" value="@department.DepartmentName.ToLower()" />
+                    <div class="col-md-4">
+                        <div class="box box-widget widget-user-2">
+                            <!-- Add the bg color to the header using any of the bg-* classes -->
+                            <div class="widget-user-header bg-blue department-title data-row">
+                                <h4>@department.DepartmentName</h4>
+                            </div>
+                            <div class="box-footer no-padding">
+                                <ul class="nav nav-stacked">
+                                    <li><a href="~/department/@department.ShortName">Number of staff <span class="pull-right badge bg-orange">@department.NumberOfStaff</span></a></li>
+                                    <li><a href="~/department/@department.ShortName">Number of objective(s) <span class="pull-right badge bg-aqua">@department.NumberOfObjectives</span></a></li>
+                                    <li><a href="~/cluster/@department.ShortName">Peformance Bands</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+
+        }
+    </div>
+</div>
+
+
+@section scripts{
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('input#searchInput').keyup(function () {
+                var searchCriteria = $(this).val().toLowerCase();
+                if (searchCriteria.length > 1) {
+
+                    $('div.data-div>input#deptName').each(function () {
+                        var text = $(this).val(),
+                            textL = text.toLowerCase();
+
+                        (textL.indexOf(searchCriteria) == 0) ? $(this).parent().show() : $(this).parent().hide();
+                    });
+
+                }else{
+                    $('div.data-div').show();
+                }
+            });
+
+        });
+
+    </script>
+
+}
+

@@ -1,0 +1,133 @@
+﻿@model Sirius.Web.Models.UserOrganizationSettingViewModel
+
+@section styles{
+    @Styles.Render("~/toastr/css")
+}
+
+@{
+    ViewBag.Title = "Organization";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+<div class="row">
+    @{ Html.RenderAction("SettingsPartial", new { link = "organization" }); }
+
+    <div class="col-md-6">
+        <div class="box box-solid">
+            <div class="box-header with-border">
+                <h2 class="box-title">Account</h2>
+                <p class="text-muted">Change your basic account settings</p>
+            </div>
+
+            @using (Ajax.BeginForm("OrganizationSetting", "Settings", new AjaxOptions()
+                {
+                    OnBegin = "settingBegin",
+                    OnComplete = "settingComplete",
+                    OnFailure = "settingFailure",
+                    OnSuccess = "settingSuccess",
+                    HttpMethod = "Post",
+                    InsertionMode = InsertionMode.Replace,
+                }))
+            { 
+                <div class="box-body">
+                    <div class="form-group">
+                        <div class="col-md-offset-1"><p class="text-muted"></p></div>
+                        <label class="col-sm-offset-1 col-sm-2 control-label">StaffId </label>
+                        <div class="col-sm-5">
+                            @Html.TextBoxFor(m => m.StaffId, new { @class = "form-control", @readonly = true })
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="box-body">
+                    <div class="form-group">
+                        <div class="col-sm-offset-1 col-sm-10">
+                            <label class="control-label">Job description </label>
+                            @Html.TextBoxFor(m => m.JobDescription, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+                <div class="box-footer">
+                    <div class="form-group">
+                        <label class="col-sm-offset-1 col-sm-3 control-label"></label>
+                        <div class="col-sm-offset-4 col-sm-5">
+                            <a id="submitButton" href="#" onclick="$(this).closest('form').submit()" class="btn btn-success btn-block">Save Changes</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="box box-solid">
+            <div class="box-header with-border">
+                <h2 class="box-title">Status Settings</h2>
+                <p class="text-muted">Change your staff status</p>
+            </div>
+            <div class="box-body">
+                <div class="form-group">
+                    <label class="col-sm-offset-1 col-sm-2 control-label">Status</label>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            @Html.TextBoxFor(m => m.Status, new { @class = "form-control", @readonly = true })
+                        </div>
+                        <div class="col-sm-2">
+                            <a data-toggle="modal" href="#statusSettings" class="btn btn-warning btn-flat"><i class="fa fa-edit"></i></a>
+                        </div>
+                    </div>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@{ Html.RenderAction("EditUserStatus", "Settings"); }
+
+@section scripts{
+    @Scripts.Render("~/toastr/js")
+
+    <script type="text/javascript">
+
+        function settingBegin() {
+            $('#submitButton').attr('disabled', 'disabled');
+        }
+        function settingComplete() {
+            $('#submitButton').removeAttr('disabled');
+        }
+        function settingSuccess(response) {
+            if (response.Successful) {
+                toastr.success(response.Html);
+            }
+            else {
+                toastr.error(response.Html);
+            }
+        }
+        function settingFailure() {
+            toastr.error("Something went wrong, please try again.");
+        }
+
+        function editStatusBegin() {
+            $('#editButton').attr('disabled', 'disabled');
+        }
+        function editStatusComplete() {
+            $('#editButton').removeAttr('disabled');
+        }
+        function editStatusSuccess(response) {
+            if (response.Successful) {
+                toastr.success(response.Html);
+                setTimeout(function () {
+                    window.location.reload(true);
+                }, 2000);
+            }
+            else {
+                toastr.error(response.Html);
+            }
+        }
+        function editStatusFailure() {
+            toastr.error("Something went wrong, please try again.");
+        }
+
+    </script>
+}

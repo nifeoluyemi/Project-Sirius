@@ -1,0 +1,52 @@
+﻿@model Sirius.Web.Models.AppraisalRecommendationViewModel
+
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true"><i class="fa fa-times"></i></span>
+            </button>
+            @if (Model.IsEdit)
+            {
+                <h4 class="modal-title">Edit Recommendation</h4>
+            }
+            else
+            {
+                <h4 class="modal-title">New Recommendation</h4>
+            }
+        </div>
+        @using (Ajax.BeginForm("EditRecommendation", "PM", new AjaxOptions()
+                {
+                    OnBegin = "recommendationBegin",
+                    OnComplete = "recommendationComplete",
+                    OnFailure = "recommendationFailure",
+                    OnSuccess = "recommendationSuccess",
+                    HttpMethod = "Post",
+                    InsertionMode = InsertionMode.Replace
+                }))
+        {
+            <div class="modal-body">
+                @if (Model.IsEdit)
+                {
+                    @Html.HiddenFor(m => m.RecommendationId)
+                }
+            
+                @Html.HiddenFor(m => m.IsEdit)
+                <div class="form-group">
+                    <h4><label> Recommendation Title: </label></h4>
+                    @Html.TextBoxFor(m => m.Recommendation, new { @class = "form-control", @placeholder = "Enter Recommendation Here..." })
+                </div>
+                <div class="form-group">
+                    <h4><label> Description: </label></h4>
+                    @Html.TextAreaFor(m => m.Description, new { @class = "form-control", @placeholder = "Enter description for this recomendation..", @style = "width:100%;height:150px;" })
+                </div>
+            
+            </div>
+            <div class="modal-footer">
+                <a id="submitButton" class="btn btn-success" onclick="$(this).closest('form').submit()">ADD</a>
+                <a class="btn btn-default pull-left" data-dismiss="modal">Close</a>
+            </div>
+        }
+    </div>
+            
+</div>

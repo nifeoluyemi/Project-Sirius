@@ -1,0 +1,28 @@
+﻿<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+    <title>SiriusPM | @ViewBag.Title</title>
+    @Styles.Render("~/Template/bootstrap")
+    @Styles.Render("~/Template/gencss")
+    @Styles.Render("~/Template/logincss")
+
+</head>
+<body class="hold-transition login-page-pic lockscreen">
+    <div>
+        @RenderBody()
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/Template/login-js")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

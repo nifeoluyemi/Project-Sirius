@@ -1,0 +1,114 @@
+﻿@model Sirius.Web.Models.DepartmentSettingViewModel
+
+@section styles{
+    @Styles.Render("~/toastr/css")
+}
+
+@{
+    ViewBag.Title = "Department";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+<div class="row">
+    @{ Html.RenderAction("SettingsPartial", new { link = "department" }); }
+
+    <div class="col-md-6">
+        <div class="box box-solid">
+            <div class="box-header with-border">
+                <h2 class="box-title">Department</h2>
+                <p class="text-muted">Change your department</p>
+            </div>
+            <div class="box-body">
+                @if (Model.Department != null)
+                {
+                    <div class="col-md-12">
+                        <p><b>Your Department </b></p>
+                        <div class="box box-solid">
+                            <div class="box-widget widget-user-2">
+                                <div class="widget-user-header bg-gray">
+                                    <div class="widget-user-image textCircle">
+                                        @Model.Department.ShortName.ToUpper()[0]
+                                    </div><!-- /.widget-user-image -->
+                                    <h3 class="widget-user-username"><b>@Model.Department.DepartmentName</b></h3>
+                                    <h4 class="widget-user-desc">@Model.Department.ShortName</h4>
+                                </div>
+                            </div>
+                            @if (!Model.IsAppraisalPeriod)
+                            {
+                                <div class="box-body no-padding">
+                                    <ul class="nav nav-stacked">
+                                        <li>
+                                            <a href="#" class="drop"><b>Change Department</b></a>
+                                            <div class="box-body sub" style="display:none;">
+                                                @{ Html.RenderAction("DepartmentSetting", "Settings", new { currentDepartmentId = Model.Department.DepartmentId }); }
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+
+                @if (Model.UserDepartments.Count() > 0)
+                {
+                    <div class="col-md-12">
+                        <br />
+                        <br />
+                        <h4><span class="label bg-blue">Your Departments</span></h4>
+                        <table class="table table-striped">
+                            <tbody>
+                                @foreach (var department in Model.UserDepartments)
+                                {
+                                    <tr>
+                                        <td>@department.DepartmentName</td>
+                                        <td>@department.StartDate</td>
+                                        <td>@department.EndDate</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+@section scripts{
+    @Scripts.Render("~/toastr/js")
+
+    <script type="text/javascript">
+
+        $('.sub').slideUp();
+        $('.drop').click(function (e) {
+            e.stopPropagation();
+            $('.sub').slideToggle();
+        });
+
+        function departmentBegin() {
+            $('#submitButton').attr('disabled', 'disabled');
+        }
+        function departmentComplete() {
+            $('#submitButton').removeAttr('disabled');
+        }
+        function departmentSuccess(response) {
+            if (response.Successful) {
+                toastr.success(response.Html);
+                setTimeout(function () {
+                    window.location.reload(true);
+                }, 2000);
+            }
+            else {
+                toastr.error(response.Html);
+            }
+        }
+        function departmentFailure() {
+            toastr.error("Something went wrong, please try again.");
+        }
+
+    </script>
+}

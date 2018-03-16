@@ -1,0 +1,136 @@
+﻿@model Sirius.Web.Models.FormatViewModel
+
+@section styles{
+    @Styles.Render("~/toastr/css")
+}
+
+@{
+    ViewBag.Title = "AppraisalFormat";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+    ViewBag.Active = "a_appraisalformat";
+}
+
+<div class="row">
+    @Html.Partial("_AppraisalSettingsMenuPartial")
+
+    <div class="col-md-9">
+        <div class="box box-solid">
+            <div class="box-header with-border">
+                <h2 class="box-title">Appraisal Format</h2>
+                <p class="text-muted"></p>
+            </div>
+            <div class="box-body">
+                @using (Ajax.BeginForm("AppraisalFormat", "PM", new AjaxOptions()
+                    {
+                        OnBegin = "formatBegin",
+                        OnComplete = "formatComplete",
+                        OnFailure = "formatFailure",
+                        OnSuccess = "formatSuccess",
+                        HttpMethod = "Post",
+                        InsertionMode = InsertionMode.Replace
+                    }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(m => m.IsEdit)
+                    @Html.HiddenFor(m => m.FormatId)
+                    <div class="col-md-12">
+
+                        <div class="col-md-8">
+                            <h4>Overall Appraisal Maximum Rating</h4>
+                            <p><small>(The maximum score for each staff in NDIC overall appraisal rating)</small></p>
+                        </div>
+                        <div class="col-md-3">
+                            <h4> </h4>
+                            @Html.TextBoxFor(m => m.OverallRating, new { id = "numberInput", @class = "form-control text-center", @data_error = "overall", @maxLength = 3 })
+                            <small class="text-center text-danger" id="overall"></small>
+                        </div>
+
+                    </div>
+                    <div class="col-md-12">
+                        <hr>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="col-md-8">
+                            <h4>Staff Tasks Maximum Rating</h4>
+                            <p><small>(The maximum score for each Task in @User.Identity.GetUserOrganizationShortname().ToUpper())</small></p>
+                        </div>
+                        <div class="col-md-3">
+                            <h4> </h4>
+                            @Html.TextBoxFor(m => m.TaskRating, new { id = "numberInput", @class = "form-control text-center", @data_error = "task", @maxLength = 3 })
+                            <small class="text-center text-danger" id="task"></small>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <hr>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="col-md-8">
+                            <h4>Dimension <span class="text-muted">(Competencies)</span> Maximum Rating</h4>
+                            <p><small>(The maximum score for each competency in @User.Identity.GetUserOrganizationShortname().ToUpper())</small></p>
+                        </div>
+                        <div class="col-md-3">
+                            <h4> </h4>
+                            @Html.TextBoxFor(m => m.DimensionRating, new { id = "numberInput", @class = "form-control text-center", @data_error = "dimension", @maxLength = 3 })
+                            <small class="text-center text-danger" id="dimension"></small>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <hr>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="col-md-offset-8 col-md-3">
+                            @if (Model.IsAppraisalPeriod)
+                            {
+                                <a disabled data-toggle="tooltip" title="@User.Identity.GetUserOrganizationShortname().ToUpper() is in an appraisal period. You cannot modify this settings during an appraisal period." data-placement="left" class="btn btn-block btn-warning"> Save </a>
+                            }
+                            else
+                            {
+                                <a onclick="$(this).closest('form').submit()" id="submitButton" class="btn btn-block btn-warning"> Save </a>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    @Scripts.Render("~/toastr/js")
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            //called when key is pressed in textbox
+            $("input#numberInput").keypress(function (e) {
+                var errorDiv = $(this).attr('data-error');
+                //if the letter is not digit then display error and don't type anything
+                if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                    //display error message
+                    $("#" + errorDiv).html("Numbers Only").show().delay(1000).fadeOut("slow");
+                    return false;
+                }
+            });
+        });
+
+        function formatBegin() {
+            $('#submitButton').attr('disabled', 'disabled');
+        }
+        function formatComplete() {
+            $('#submitButton').removeAttr('disabled');
+        }
+        function formatSuccess(response) {
+            if (response.Successful) {
+                toastr.success(response.Html);
+            }
+            else {
+                toastr.error(response.Html);
+            }
+        }
+        function formatFailure() {
+            toastr.error("Something went wrong, please try again.");
+        }
+
+    </script>
+}

@@ -1,0 +1,58 @@
+﻿@model Sirius.Web.Models.EditAppraisalDimensionViewModel
+
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true"><i class="fa fa-times"></i></span>
+            </button>
+            <h4 class="modal-title">Edit Competency</h4>
+        </div>
+        @using (Ajax.BeginForm("EditDimension", "PM", new AjaxOptions()
+        {
+            OnBegin = "editBegin",
+            OnComplete = "editComplete",
+            OnFailure = "editFailure",
+            OnSuccess = "editSuccess",
+            HttpMethod = "Post",
+            InsertionMode = InsertionMode.Replace
+        }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="modal-body">
+                <p>Edit @Model.Name Competency</p>
+                @Html.HiddenFor(m => m.DimensionId)
+                <div class="row">
+                    <div class="col-md-5 form-group">
+                        <label><b>Competency name:</b></label>
+                        @Html.TextBoxFor(m => m.Name, new { @class = "form-control", @placeholder = "Competency name" })
+                    </div>
+                    <div class="col-md-7 form-group">
+                        <label><b>Performance Indicator(s):</b></label>
+                        @Html.TextBoxFor(m => m.PerformanceIndicators, new { @class = "form-control", @placeholder = "Performance Indicator(s)" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label><b>Description:</b></label>
+                    @Html.TextAreaFor(m => m.Description, new { @class = "form-control", @placeholder = "Please provide a detailed description for this competency", @rows = 3 })
+                </div>
+
+                <div class="row">
+                    <div class="col-md-10 form-group">
+                        <label><b>Set the maximum score for this comopetency: </b></label>
+                        <input id="rangeEdit_@Model.HtmlId" type="text" class="form-control">
+                    </div>
+                    <div class="col-md-2 form-group">
+                        <label>Max Score:</label>
+                        @Html.TextBoxFor(m => m.MaxScore, new { id = "rangeValue_" + Model.HtmlId, @class = "form-control input-lg", @readonly = true })
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" id="editDimensionButton" class="btn btn-success">Update Competency</button>
+                <a class="btn btn-default pull-left" data-dismiss="modal">Close</a>
+            </div>
+        }
+    </div>
+</div>

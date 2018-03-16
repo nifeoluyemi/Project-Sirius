@@ -1,0 +1,30 @@
+﻿@model Sirius.Web.Models.AppraisalCycleViewModel
+
+@section styles{
+
+}
+
+@{
+    ViewBag.Active = "a_appraisalcycles";
+    ViewBag.Title = "PeriodSetting";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+<div class="row">
+    @Html.Partial("_AppraisalSettingsMenuPartial")
+
+    <div class="col-md-9">
+        @Html.Action("AppraisalCycles")
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            
+            
+        });
+
+    </script>
+}

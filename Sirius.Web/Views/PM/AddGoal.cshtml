@@ -1,0 +1,42 @@
+﻿@model Sirius.Web.Models.AddGoalViewModel
+
+<div class="modal fade" id="addGoal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="fa fa-times"></i></span>
+                </button>
+                <h4 class="modal-title">New Goal</h4>
+            </div>
+            @using (Ajax.BeginForm("AddGoal", "PM", new AjaxOptions()
+                {
+                    OnBegin = "addGoalBegin",
+                    OnComplete = "addGoalComplete",
+                    OnFailure = "addGoalFailure",
+                    OnSuccess = "addGoalSuccess",
+                    HttpMethod = "Post",
+                    InsertionMode = InsertionMode.Replace
+                }))
+            {
+                <div class="modal-body">
+                    <p>Add new Goal</p>
+                
+                    <div class="form-group">
+                        <label> Goal: </label>
+                        @Html.TextBoxFor(m => m.Goal, new { @class = "form-control", @placeholder = "Goal Title" })
+                    </div>
+                    <div class="form-group">
+                        <label> Description: </label>
+                        @Html.TextAreaFor(m => m.Description, new { @class = "form-control", @placeholder = "Please provide a detailed description for this Goal", @rows = 3 })
+                    </div>
+                    
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" class="btn btn-flat bg-purple pull-right" value="ADD">
+                    <a class="btn btn-default pull-left" data-dismiss="modal">Close</a>
+                </div>
+            }
+    </div>
+</div>
+</div>

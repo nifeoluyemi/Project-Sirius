@@ -1,0 +1,197 @@
+﻿@model Sirius.Web.Models.UserTaskDetailViewModel
+
+@section styles{
+    @Styles.Render("~/toastr/css")
+    @Styles.Render("~/sweetalert/css")
+    @Styles.Render("~/ionRangeSlider/css")
+}
+
+@{
+    ViewBag.Title = "TaskDetail";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+<div ng-app="app">
+    <div class="row" ng-controller="taskDetailCtrl">
+        @Html.HiddenFor(m => m.UserTaskId, new { id = "userTaskId" })
+        <div class="col-md-8">
+
+            <div class="box box-solid">
+                <div class="box-header with-border">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="col-md-2">
+                                <img style="border:2px solid #605ca8;" class="img-circle" width="50" src="/Base/GetUserIdAvatar?userId={{Task.AssignedToId}}" alt="User Avatar">
+                            </div>
+                            <div class="col-md-9">
+                                <p ng-show="currentUserId == Task.AssignedToId"><b>You</b></p>
+                                <p ng-show="currentUserId != Task.AssignedToId"><b>{{Task.AssignedTo}}</b></p>
+                                <small class="text-muted"> Last activity:</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <p></p>
+                            <span class="pull-right" ng-show="currentUserId == Task.AssignedToId">
+                                <a href="#" class="btn bg-purple"><i class="fa fa-edit"></i></a>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="box-body">
+
+                    <div class="col-md-12">
+                        <h4><span class="label bg-navy"><b>Task:</b></span></h4>
+                        <h4>{{Task.TaskTitle}}</h4>
+                    </div>
+                    <div class="col-md-12">
+                        <h4><span class="label bg-navy"><b>Description:</b></span></h4>
+                        <p>{{Task.Description}}</p>
+                    </div>
+
+                    <div class="col-md-10">
+                        <div class="box box-primary collapsed-box">
+                            <div class="box-header with-border">
+                                <h2 class="box-title"><span class="label bg-navy">Measures and Targets</span></h2>
+                                <div class="box-tools pull-right">
+                                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th><span class="label bg-navy">Measure</span></th>
+                                            <th><span class="label bg-navy">Target</span></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="expectation in TaskExpectations">
+                                            <td>{{expectation.Measure}}</td>
+                                            <td>{{expectation.Target}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <br />
+                        <br />
+                        <h4>
+                            <span class="label bg-navy"><b>Comments:</b></span>
+                            <small><span class="pull-right">{{commentCount}} comments</span></small>
+                        </h4>
+                        <div class="box box-solid">
+                            <div class="box-header bg-gray">
+                                <div class="row">
+                                    <div class="col-md-1">
+                                        <img style="border:2px solid #605ca8;" class="img-circle" width="35" src="/Base/GetUserIdAvatar?userId={{currentUserId}}" alt="User Avatar">
+                                    </div>
+                                    <div class="col-md-11">
+                                        <textarea ng-model="Comment.CommentBody" class="form-control" placeholder="Give a comment about this task"></textarea>
+                                        <span ng-show="Comment.CommentBody.length > 1" class="pull-right"><button type="submit" id="commentButton" class="btn bg-green btn-sm btn-flat" ng-click="addComment()">Post Comment</button></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="box-footer box-comments comment-body">
+                                <div class="box-comment" ng-repeat="comment in Comments | orderBy: '-Date'">
+                                    <!-- User image -->
+                                    <a href="#"><img class="img-circle" src="/Base/GetUserIdAvatar?userId={{comment.CommenterId}}" alt="message user image" style="border:2px solid #605ca8;"></a>
+                                    <div class="comment-text">
+                                        <span class="username">
+                                            <span>{{comment.CommenterName}}</span>
+                                            <span class="text-muted pull-right" ng-show="currentUserId == comment.CommenterId"><a href="#" ng-click="deleteComment(comment)" class="text-danger deleteCommentButton"><i class="fa fa-trash"></i> Delete</a></span>
+                                        </span>
+                                        <p>
+                                            {{comment.Comment}}
+                                        </p>
+                                        <small>{{comment.Date | date:'dd MMM yy'}}</small>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="box box-solid">
+                <div class="box-header with-border">
+                    <h2 class="box-title">{{ratingCount}} Ratings</h2>
+                    <span class="pull-right"><a class="btn btn-sm bg-green" data-toggle="modal" data-target="#evaluateTask">Rate this task</a></span>
+                </div>
+
+                <div class="evaluation-body">
+                    <div ng-repeat="rating in Ratings | orderBy: '-Date'">
+                        <div class="box-body box-Evaluate">
+                            <div class="direct-chat-msg">
+                                <div class="direct-chat-info clearfix">
+                                    <span class="direct-chat-name pull-left">{{rating.EvaluatorName}}</span>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <p style="font-size:40px;">{{rating.Score}}</p>
+                            </div>
+                            <span ng-show="currentUserId == rating.EvaluatorId"><a href="" ng-click="deleteRating(rating)" class="text-danger deleteEvaluationButton"><i class="fa fa-trash"></i> Delete</a></span>
+                            <span class="direct-chat-timestamp pull-right"> {{rating.Date | date:'dd MMM yy'}}</span>
+                        </div>
+                        <hr>
+                    </div>
+                    
+                </div>
+                <div class="box-footer">
+                    @*<h4 class="pull-right"><span class="label label-info">Average: <b>5.4</b></span></h4>*@
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="evaluateTask" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true"><i class="fa fa-times"></i></span>
+                        </button>
+                        <h4 class="modal-title">Rate this Task</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="col-md-9">
+                                    <p ng-show="currentUserId != Task.AssignedToId">Rate {{user.FirstName}}'s performance so far on this task</p>
+                                    <p ng-show="currentUserId == Task.AssignedToId">Rate your performance so far on this task</p>
+                                    <input id="rating_range" type="text" class="form-control input-sm" ng-model="Rating.Score">
+                                </div>
+                                <div class="col-md-3">
+                                    <br>
+                                    <br>
+                                    <input id="rangeValue" ng-model="Rating.Score" value="{{Rating.Score}}" type="text" class="form-control input-lg text-center" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <a id="evaluateButton" ng-click="addRating()" class="btn btn-success pull-right">Rate <i class="fa fa-check"></i></a>
+                        <a class="btn btn-default pull-left" data-dismiss="modal">Close</a>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+    
+
+@section scripts{
+@Scripts.Render("~/toastr/js")
+@Scripts.Render("~/sweetalert/js")
+@Scripts.Render("~/ionRangeSlider/js")
+@*<script src="~/Views/UserTask/taskDetailCtrl.js"></script>*@
+<script src="~/Scripts/App/taskDetailCtrl.js"></script>
+}

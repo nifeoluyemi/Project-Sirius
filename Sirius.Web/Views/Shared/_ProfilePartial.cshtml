@@ -1,0 +1,21 @@
+﻿@if (Request.IsAuthenticated)
+{
+    <li class="user-header">
+        <img src=@Url.Action("GetUserAvatar", "Base", new { username = User.Identity.Name }) class="img-circle" alt="User Image">
+        <p>
+            @User.Identity.GetUserFullname()
+        </p>
+    </li>
+    <li class="user-footer">
+        <div class="pull-left">
+            <a href="~/profile" class="btn btn-default btn-flat">Profile</a>
+        </div>
+        @using (Html.BeginForm("LogOff", "User", FormMethod.Post, new { id = "logoutForm" }))
+        {
+            <div class="pull-right">
+                <a href="javascript:document.getElementById('logoutForm').submit()" class="btn btn-default btn-flat">Sign out</a>
+            </div>
+        }
+    </li>
+}
+

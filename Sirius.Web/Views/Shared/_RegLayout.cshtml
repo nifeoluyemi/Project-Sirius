@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<title>SiriusPM | @ViewBag.Title</title>
+	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+    <meta name="viewport" content="width=device-width" />
+
+    @Styles.Render("~/Template/bootstrap")
+    @Styles.Render("~/Template/regcss")
+    @Styles.Render("~/Croppie/css")
+
+</head>
+<body>
+    <div>
+        @RenderBody()
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/Template/reg-js")
+    @Scripts.Render("~/Croppie/js")
+
+    <script>
+    $(function () {
+        //Datemask dd/mm/yyyy
+        $("#datemask").inputmask("dd/mm/yyyy", {"placeholder": "dd/mm/yyyy"});
+      });
+    </script>
+
+    @RenderSection("scripts", required: false)
+
+</body>
+</html>

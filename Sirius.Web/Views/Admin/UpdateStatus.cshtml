@@ -1,0 +1,29 @@
+﻿@model Sirius.Web.Models.AddStatusViewModel
+
+<div class="modal-content">
+    @using (Ajax.BeginForm("UpdateStatus", "Admin", new AjaxOptions() { OnBegin = "updateStatusBegin", OnComplete = "updateStatusComplete", OnSuccess = "updateStatusSuccess", OnFailure = "updateStatusFailure", HttpMethod = "Post" }))
+    {
+        <div class="modal-header">
+            @Html.HiddenFor(m => m.StatusId)
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true"><i class="fa fa-times"></i></span>
+            </button>
+            <h4 class="modal-title">Upadate @Model.StatusName</h4>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label class="control-label col-sm-3">Shortname:</label>
+                @Html.TextBoxFor(m => m.StatusShortname, new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-3">Department Name:</label>
+                @Html.TextBoxFor(m => m.StatusName, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a id="updateStatusButton" onclick="$(this).closest('form').submit()" class=" btn btn-success">Update</a>
+            <a class="btn btn-default pull-left" data-dismiss="modal" aria-hidden="true">Cancel</a>
+        </div>
+        @Html.AntiForgeryToken()
+    }
+</div>

@@ -1,0 +1,213 @@
+﻿@model Sirius.Web.Models.DimensionViewModel
+
+@section styles{
+    @Styles.Render("~/toastr/css")
+    @Styles.Render("~/sweetalert/css")
+    @Styles.Render("~/ionRangeSlider/css")
+}
+
+@{
+    ViewBag.Title = "Competencies";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+    ViewBag.Active = "competencies";
+}
+
+<div ng-app="app">
+    <div class="row" data-spy="scroll" data-target="#myScrollspy" id="scrollBody" ng-controller="mainCtrl">
+        @Html.HiddenFor(m => m.OrganizationId, new { id = "orgId" })
+        @Html.HiddenFor(m => m.UserId, new { id = "userId" })
+        @Html.HiddenFor(m => m.CurrentUserId, new { id = "currentUserId" })
+        <div class="col-md-3 hidden-sm hidden-xs">
+
+            <div class="panel-affix" id="myScrollspy">
+                <!-- Default panel contents -->
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h2 class="box-title">Competencies</h2>
+                    </div>
+                    <div class="box-body no-padding">
+                        <ul class="nav nav-stacked">
+                            <li ng-repeat="competency in competencies | filter:{IsDepartment: false}">
+                                <a ng-click="selectCompetency(competencies.indexOf(competency))" href="#">{{competency.DimensionName}}</a>
+                            </li>
+
+                            <li role="presentation" class="divider"></li>
+                            <li role="presentation" class="divider"></li>
+                            <li role="presentation" class="divider"></li>
+
+                            <li><a id="sectionlinks" class="bg-blue" href="#department"><b>{{user.DepartmentName}}</b></a></li>
+
+                            <li ng-repeat="competency in competencies | filter:{IsDepartment: true}">
+                                <a ng-click="selectCompetency(competencies.indexOf(competency))" href="#">{{competency.DimensionName}}</a>
+                            </li>
+                            <li role="presentation" class="divider"></li>
+                            <li role="presentation" class="divider"></li>
+                            <li role="presentation" class="divider"></li>
+                            <li><a id="sectionlinks" href="#toTop">Back To Top <span class="glyphicon glyphicon-hand-up"></span></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-md-9">
+
+            <div class="box box-solid">
+                <div class="box-header bg-blue">
+                    <h2 class="box-title" ng-show="currentUser.UserId != user.UserId">Competencies for {{user.FirstName}} {{user.LastName}}</h2>
+                    <h2 class="box-title" ng-show="currentUser.UserId == user.UserId">Your Competencies</h2>
+                </div>
+                <div class="box-footer">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <button type="button" ng-click="previousCompetency()" class="btn btn-sm btn-block btn-default">previous</button>
+                        </div>
+                        <div class="col-md-6 text-center">
+                            <p style="font-size:18px;">{{current.DimensionName}}</p>
+                        </div>
+                        <div class="col-md-3">
+                            <button type="button" ng-click="nextCompetency()" class="btn btn-sm btn-block btn-default">next</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="box box-solid">
+                <div class="box-header bg-blue">
+                    <h2 class="box-title">{{current.DimensionName}}</h2>
+                    <div class="box-tools" ng-show="current.IsDepartment">
+                        <p style="font-size:17px;"><span class="label label-default">{{user.DepartmentName}}</span></p>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div class="col-md-12">
+                        <div class="col-md-6">
+                            <h4><span class="label bg-navy">Key Performance Indicators</span></h4>
+                            <p>{{current.PerformanceIndicators}}</p>
+                        </div>
+
+                        <div class="col-md-12" ng-show="cycle == null">
+
+                        </div>
+
+                        <div class="col-md-12" ng-show="cycle != null">
+                            <h4><span class="label bg-navy"><b>Ratings</b></span></h4>
+
+                            <div class="panel panel-default" ng-show="current.showRatingBody">
+                                <div class="panel-body">
+                                    <div class="col-md-12">
+                                        <div class="col-md-9" ng-repeat="competency in competencies" ng-show="current.DimensionId == competency.DimensionId">
+                                            <small ng-show="currentUser.UserId != user.UserId">Rate {{user.FirstName}}'s {{current.DimensionName}} competency</small>
+                                            <small ng-show="currentUser.UserId == user.UserId">Rate your {{current.DimensionName}} competency</small>
+                                            <input id="rating_range{{current.HtmlId}}" type="text" class="form-control input-sm" ng-model="current.rating">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <br>
+                                            <input id="rangeValue{{current.HtmlId}}" ng-model="current.rating" value="{{current.rating}}" type="text" class="form-control input-lg text-center" readonly>
+                                        </div>
+                                        <div class="col-md-offset-9 col-md-3" ng-show="current.rating != 0 || current.rating != '0'">
+                                            <button class="btn btn-success btn-flat btn-block" ng-click="addRating(current.IsDepartment)">Rate</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    {{current.ratingsCount}} ratings
+                                    <span class="pull-right" ng-show="currentUser.DepartmentId == user.DepartmentId"><button class="btn btn-xs bg-purple" ng-click="toggleRatingBody(current)">Rate Competency</button></span>
+                                    <!--<p class="label bg-aqua">Average: <b>5.7</b></p>-->
+                                </div>
+                                <div class="panel-body rating-body">
+                                    <div class="row">
+                                        <div class="col-md-6" ng-repeat="rating in current.ratings | orderBy: '-Date'">
+                                            <table class="table table-bordered box-Evaluate">
+                                                <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            <h4>{{rating.EvaluatorName}}</h4>
+                                                            <small class="pull-right" ng-show="currentUser.UserId == rating.EvaluatorId"><a href="" ng-click="deleteRating(rating, current.IsDepartment)" class="text-danger deleteEvaluationButton"><i class="fa fa-trash"></i> Delete</a></small>
+                                                        </td>
+                                                        <td width="100" class="text-center">
+                                                            <h4><b>{{rating.RatingBody}}</b></h4>
+                                                            <small>{{rating.Date | date:'dd MMM yy'}}</small>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12" ng-show="cycle != null">
+                            <br />
+                            <h4>
+                                <span class="label bg-navy"><b>Comments:</b></span>
+                                <small><span class="pull-right">{{current.commentCount}} comments</span></small>
+                            </h4>
+                            <div class="box box-solid">
+                                <div class="box-header bg-gray" ng-show="currentUser.DepartmentId == user.DepartmentId">
+                                    <div class="row">
+                                        <div class="col-md-1">
+                                            <img style="border:2px solid #605ca8;" class="img-circle" width="35" src="/Base/GetUserIdAvatar?userId={{currentUser.UserId}}" alt="User Avatar">
+                                        </div>
+                                        <div class="col-md-11">
+                                            <textarea ng-model="current.comment" class="form-control" placeholder="Give {{user.FirstName}} a comment about {{current.DimensionName}}"></textarea>
+                                            <span ng-show="current.comment.length > 1" class="pull-right"><button type="submit" id="commentButton" class="btn bg-green btn-sm btn-flat" ng-click="addComment(current.IsDepartment)">Post Comment</button></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="box-footer box-comments comment-body">
+                                    <div class="box-comment" ng-repeat="comment in current.comments | orderBy: '-Date'">
+                                        <!-- User image -->
+                                        <a href="#"><img class="img-circle" src="/Base/GetUserIdAvatar?userId={{comment.CommenterId}}" alt="message user image" style="border:2px solid #605ca8;"></a>
+
+                                        <div class="comment-text">
+                                            <span class="username">
+                                                <span>{{comment.CommenterName}}</span>
+                                                <span class="text-muted pull-right" ng-show="currentUser.UserId == comment.CommenterId"><a href="" ng-click="deleteComment(comment, current.IsDepartment)" class="text-danger deleteCommentButton"><i class="fa fa-trash"></i> Delete</a></span>
+                                            </span><!-- /.username -->
+                                            <p>{{comment.Comment}}</p>
+                                            <small>{{comment.Date | date:'dd MMM yy'}}</small>
+                                        </div><!-- /.comment-text -->
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    
+
+        <!-- If there is no current appraisal cycle -->
+        @*<div class="info-box">
+            <span class="info-box-icon bg-purple"><i class="fa fa-calendar-minus-o"></i></span>
+            <div class="info-box-content">
+                <h3>There is no current appraisal cycle, contact your administrator.</h3>
+            </div>
+        </div>*@
+    
+
+    <div class="row" id="fake-footer"></div>
+</div>
+
+@section scripts{
+    @Scripts.Render("~/toastr/js")
+    @Scripts.Render("~/sweetalert/js")
+    @Scripts.Render("~/ionRangeSlider/js")
+    @Scripts.Render("~/userDimension/js")
+
+   
+    
+<script src="~/Views/Dimension/dimensionCtrl.js"></script>
+
+
+}

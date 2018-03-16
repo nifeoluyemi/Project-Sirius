@@ -1,0 +1,57 @@
+﻿@model Sirius.Web.Models.StatusViewModel
+
+<div class="modal fade" id="addStaffStatus" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="fa fa-times"></i></span>
+                </button>
+                <h4 class="modal-title">Add Staff Status</h4>
+            </div>
+            @using (Ajax.BeginForm("AddStatus", "Admin", new AjaxOptions()
+                {
+                    OnBegin = "onBegin",
+                    OnComplete = "onComplete",
+                    OnFailure = "onFailure",
+                    OnSuccess = "onSuccess",
+                    HttpMethod = "Post",
+                    InsertionMode = System.Web.Mvc.Ajax.InsertionMode.Replace
+                }))
+            {
+                <div class="modal-body">
+                    <h4></h4>
+                    <div class="dept-form">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label>Status Name<small>(required)</small>:</label>
+                            </div>
+                            <div class="col-sm-4">
+                                <label>Short Name<small>(required)</small>:</label>
+                            </div>
+                        </div>
+                        <div class="statusinputs">
+                            <div class="row add-form">
+                                <input type="hidden" name="AddModel.Index" value="0" />
+                                <div class="col-sm-6 form-group">
+                                    <input name="AddStatus[0].StatusName" class="form-control" type="text" placeholder="status Name..." data-val="true" data-val-required="*Required">
+                                    <span class="field-validation-valid text-danger" data-valmsg-for="AddStatus[0].StatusName" data-valmsg-replace="true"></span>
+                                </div>
+                                <div class="col-sm-4 form-group">
+                                    <input name="AddStatus[0].StatusShortname" class="form-control" type="text" placeholder="Short Name or Abbrev..." data-val="true" data-val-required="*Required">
+                                    <span class="field-validation-valid text-danger" data-valmsg-for="AddStatus[0].StatusShortname" data-valmsg-replace="true"></span>
+                                </div>
+                                <a class="btn btn-success" id="addbutton"><i class="fa fa-plus"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    @Html.AntiForgeryToken()
+                </div>
+                <div class="modal-footer">
+                    <input id="submitStatus" type="submit" value="SUBMIT" class="btn btn-success">
+                    <a class="btn btn-default pull-left" data-dismiss="modal" aria-hidden="true">Cancel</a>
+                </div>
+            }
+        </div>
+    </div>
+</div>

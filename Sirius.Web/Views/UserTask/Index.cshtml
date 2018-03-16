@@ -1,0 +1,149 @@
+﻿@model string
+
+@section styles{
+    @Styles.Render("~/toastr/css")
+    @Styles.Render("~/sweetalert/css")
+}
+
+@{
+    ViewBag.Title = "Tasks for";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+    int j = 1;
+    ViewBag.Active = "tasks";
+}
+
+
+<div ng-app="Task">
+    <div ng-controller="TaskCtrl">
+    <input type="hidden" value="@Model" id="userID" />
+
+    <div ng-show="appraisalInfo != null">
+        <div class="info-box">
+            <span class="info-box-icon bg-purple"><i class="fa fa-suitcase"></i></span>
+            <div class="info-box-content">
+                <h4><span class="info-box-text">Tasks list</span></h4>
+                <span class="info-box-number">
+                    {{tasksCount}}
+                    <span ng-if="User.IsAdmin">
+                        <a data-toggle="modal" ng-if="userInfo.SupervisorId != null" href="#addTask" class="btn btn-flat bg-purple pull-right"><i class="fa fa-plus"></i> New Task</a>
+                        <a disabled data-toggle="tooltip" ng-if="userInfo.SupervisorId == null" title="You need a superivsor before you can create a task." data-placement="left" class="btn btn-flat bg-purple pull-right"><i class="fa fa-plus"></i> New Task</a>
+                    </span>
+                </span>
+            </div>
+        </div>
+        <div class="box box-solid">
+            <div class="box-header with-border">
+                <h3 class="box-title"><i class="fa fa-suitcase"></i> Tasks</h3>
+            </div>
+            <div class="box-body">
+                <div class="callout callout-info" ng-if="tasksCount == 0">
+                    <h4 ng-if="User.IsAdmin">You have no task in this appraisal cycle.</h4>
+                    <h4 ng-if="!User.IsAdmin">{{userInfo.FirstName}} has no task in this appraisal cycle.</h4>
+                </div>
+
+                <div class="table-responsive" ng-if="tasksCount > 0">
+                    <table class="table table-hover no-border">
+                        <tbody>
+                            
+                                <tr ng-repeat="task in tasks">
+                                    <td><span class="label label-info">{{$index + 1}}</span></td>
+                                    <td class="taskTitle">
+                                        <a ng-href="~/task/{{task.UserTaskId}}"><p style="font-size:15px;">{{task.TaskTitle}}<p></a>
+                                    </td>
+                                    <td>
+                                        <small>Created {{task.DateCreated}}</small>
+                                        <div class="progress progress-xxs">
+                                            <div class="progress-bar bg-purple progress-bar-striped" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: {{task.PercentageComplete}}">
+                                            </div>
+                                        </div>
+                                    </td>
+                                    @*<td align="center" class="taskTableEvaluationData">
+                                        @{ Html.RenderAction("RatingsCarousel", "UserTask", new { userTaskId = task.UserTaskId }); }
+                                    </td> *@
+                                    <td class="pull-right">
+                                        <a ng-href="~/task/{{task.UserTaskId}}" class="btn btn-default"><i class="fa fa-folder"></i> View </a>
+                                        <span ng-if="User.IsAdmin">
+                                            <a ng-if="task.IsAppraised" data-href="#" disabled data-toggle="tooltip" title="This task has already been appraised." data-placement="left" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+                                            <a ng-if="!task.IsAppraised" ng-click="deleteTask(task.UserTaskId)" id="deleteTask" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+                                        </span>
+                                    </td>
+                                </tr>
+                            
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="modal fade" id="addTask" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true"><i class="fa fa-times"></i></span>
+                        </button>
+                        <h4 class="modal-title">New Task</h4>
+                    </div>
+                    <form>
+                        <div class="modal-body">
+
+                            <div class="form-group">
+                                <label> Title: </label>
+                                <input type="text" ng-model="TaskTitle" class="form-control" placeholder="Enter Task Title" autocomplete="off" />
+                            </div>
+                            <div class="form-group">
+                                <label> Description: </label>
+                                <textarea ng-model="TaskDesc" class="form-control" placeholder="Please provide a detailed description for this task" rows="3"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-10 form-group">
+                                        <h4><b>The maximum score for this task</b></h4>
+                                    </div>
+                                    <div class="col-md-2 form-group">
+                                        <input type="text" ng-model="User.MaxScore" id="rangeValue" class="form-control input-lg" readonly="readonly" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <a id="addTaskButton" class="btn btn-success pull-right" ng-click="addTask(TaskTitle, TaskDesc)">Add Task</a>
+                            <a class="btn btn-default pull-left" data-dismiss="modal">Close</a>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+            
+        <div ng-show="appraisalInfo == null">
+            <div class="info-box">
+                <span class="info-box-icon bg-purple"><i class="fa fa-calendar-minus-o"></i></span>
+                <div class="info-box-content">
+                    <h3>There is no current appraisal cycle, contact your administrator.</h3>
+                </div>
+            </div>
+        </div>
+</div>
+</div>
+
+@section scripts{
+    @Scripts.Render("~/toastr/js")
+    @Scripts.Render("~/sweetalert/js")
+
+    @*<script src="~/Views/UserTask/UserTask.js"></script>*@
+<script src="~/Scripts/App/UserTask.js"></script>
+    <script type="text/javascript">
+
+       
+    </script>
+}
+
+
+
+

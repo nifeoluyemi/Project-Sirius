@@ -1,0 +1,72 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebUI", "WebUI", "{CFA4F66D-073A-4D4C-A900-5B4EF2F89C64}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sirius.Web", "Sirius.Web\Sirius.Web.csproj", "{279B8260-E78A-4CD5-816E-B4D4B4E76965}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sirius.Data", "Sirius.Data\Sirius.Data.csproj", "{392FCDED-C41D-4C85-9F07-CBE6562F028A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sirius.Entity", "Sirius.Entity\Sirius.Entity.csproj", "{136B1176-A1C8-41B7-865F-353CB508E209}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sirius.Services", "Sirius.Services\Sirius.Services.csproj", "{0EDC769A-DF1E-4303-B66C-BBF8335A4DA5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{90188DF4-FD37-4CF7-AD54-D152687CF57D}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 5
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://geekcampstudios.visualstudio.com/defaultcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = Sirius.Entity\\Sirius.Entity.csproj
+		SccProjectTopLevelParentUniqueName1 = ProjectSirius.sln
+		SccProjectName1 = Sirius.Entity
+		SccLocalPath1 = Sirius.Entity
+		SccProjectUniqueName2 = Sirius.Services\\Sirius.Services.csproj
+		SccProjectTopLevelParentUniqueName2 = ProjectSirius.sln
+		SccProjectName2 = Sirius.Services
+		SccLocalPath2 = Sirius.Services
+		SccProjectUniqueName3 = Sirius.Web\\Sirius.Web.csproj
+		SccProjectTopLevelParentUniqueName3 = ProjectSirius.sln
+		SccProjectName3 = Sirius.Web
+		SccLocalPath3 = Sirius.Web
+		SccProjectUniqueName4 = Sirius.Data\\Sirius.Data.csproj
+		SccProjectTopLevelParentUniqueName4 = ProjectSirius.sln
+		SccProjectName4 = Sirius.Data
+		SccLocalPath4 = Sirius.Data
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{279B8260-E78A-4CD5-816E-B4D4B4E76965}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{279B8260-E78A-4CD5-816E-B4D4B4E76965}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{279B8260-E78A-4CD5-816E-B4D4B4E76965}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{279B8260-E78A-4CD5-816E-B4D4B4E76965}.Release|Any CPU.Build.0 = Release|Any CPU
+		{392FCDED-C41D-4C85-9F07-CBE6562F028A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{392FCDED-C41D-4C85-9F07-CBE6562F028A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{392FCDED-C41D-4C85-9F07-CBE6562F028A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{392FCDED-C41D-4C85-9F07-CBE6562F028A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{136B1176-A1C8-41B7-865F-353CB508E209}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{136B1176-A1C8-41B7-865F-353CB508E209}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{136B1176-A1C8-41B7-865F-353CB508E209}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{136B1176-A1C8-41B7-865F-353CB508E209}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0EDC769A-DF1E-4303-B66C-BBF8335A4DA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0EDC769A-DF1E-4303-B66C-BBF8335A4DA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0EDC769A-DF1E-4303-B66C-BBF8335A4DA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0EDC769A-DF1E-4303-B66C-BBF8335A4DA5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{279B8260-E78A-4CD5-816E-B4D4B4E76965} = {CFA4F66D-073A-4D4C-A900-5B4EF2F89C64}
+		{392FCDED-C41D-4C85-9F07-CBE6562F028A} = {90188DF4-FD37-4CF7-AD54-D152687CF57D}
+		{136B1176-A1C8-41B7-865F-353CB508E209} = {90188DF4-FD37-4CF7-AD54-D152687CF57D}
+		{0EDC769A-DF1E-4303-B66C-BBF8335A4DA5} = {90188DF4-FD37-4CF7-AD54-D152687CF57D}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,37 @@
+﻿@model List<Sirius.Services.DTO.UserDTO>
+
+@if (Model.Count > 0)
+{
+    <table class="table table-bordered" id="userlist">
+        <thead>
+            <tr>
+                <th>Staff Name</th>
+                <th>Status</th>
+                <th>Department</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.FullName</td>
+                    <td>@user.Email</td>
+                    <td>@user.DepartmentName</td>
+                    <td>
+                        <a class="btn btn-success btn-xs" data-toggle="modal" href="#roles_@user.StaffId" id="updateRoles"><i class="fa fa-edit"></i> Edit privileges</a>
+                        <a href="#" data-href="@Url.Action("RemoveUser", "ITAdmin", new { userId = user.UserId })" id="deleteUser" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    foreach (var user in Model)
+    {
+        <div class="modal fade" id="roles_@user.StaffId" role="dialog">
+            <div class="modal-dialog">
+                @{ Html.RenderAction("UpdateUserRoles", "Admin", new { userId = user.UserId }); }
+            </div>
+        </div>
+    }
+}

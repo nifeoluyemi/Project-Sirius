@@ -1,0 +1,79 @@
+﻿
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Sirius</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    @Styles.Render("~/Template/bootstrap")
+    @Styles.Render("~/Template/gencss")
+    @Styles.Render("~/Template/maincss")
+    @Styles.Render("~/toastr/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+
+<body class="hold-transition skin-purple sidebar-mini">
+    <div ng-app="sirius">
+        <div class="wrapper" ng-controller="layoutCtrl">
+            <div ng-include="'/App/layout/header.cshtml'">
+                <!--header-->
+            </div>
+
+            <div ng-include="'/App/layout/sidebar.cshtml'">
+
+            </div>
+            <div class="content-wrapper">
+                <section class="content-header">
+                    <h1>
+                        Page
+                        <small>PageDescription</small>
+                    </h1>
+                    <ol class="breadcrumb">
+                        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                        <li class="active">Here</li>
+                    </ol>
+                </section>
+                <section class="content" ui-view>
+                    <!-- app -->
+                </section>
+            </div>
+            <footer class="main-footer">
+                <div class="pull-right hidden-xs">
+                    <b>Made with <i class="fa fa-heart text-danger"></i> for your office.</b>
+                </div>
+                <strong>Copyright &copy; 2016 <a href="#">GeekCampStudios</a>.</strong> All rights reserved.
+            </footer>
+            <div class="control-sidebar-bg"></div>
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/Template/main-js")
+    @Scripts.Render("~/toastr/js")
+    @Scripts.Render("~/angular/js")
+
+    @Scripts.Render("~/sirius/app")
+
+    @*<script src="~/App/shared/shared.core.js"></script>
+    <script src="~/App/shared/shared.ui.js"></script>
+    <script src="~/App/app.js"></script>
+    <script src="~/App/services/userService.js"></script>
+    <script src="~/App/services/notificationService.js"></script>
+    <script src="~/App/layout/layout.js"></script>
+    <script src="~/App/layout/header.js"></script>
+    <script src="~/App/layout/sidebar.js"></script>*@
+
+
+    <script type="text/javascript">
+        $('[data-toggle="tooltip"]').tooltip();
+
+    </script>
+
+    
+
+
+</body>
+</html>

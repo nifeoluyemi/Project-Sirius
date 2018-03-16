@@ -1,0 +1,218 @@
+﻿
+@section styles{
+    
+}
+
+@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+    ViewBag.PageHeader = "Dashboard";
+    ViewBag.Active = "dashboard";
+}
+<div ng-app="dashboard">
+    <div ng-controller="dashboardCtrl">
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="small-box bg-aqua">
+
+                    <div class="inner" ng-if="isValidAppraisalPeriod()">
+                        <h3>{{appraisalInfo.DaysCount}} <small style="color:white;">days</small></h3>
+                        <p>remaining in this appraisal cycle.</p>
+                    </div>
+
+                    <div class="inner" ng-if="!isValidAppraisalPeriod()">
+                        <h3>0</h3>
+                        <p>No current Appraisal period.</p>
+                    </div>
+
+                    <div class="icon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    <a data-toggle="modal" href="#cycleInfo" class="small-box-footer">
+                        More info
+                    </a>
+                </div>
+            </div>
+
+            <input type="hidden" id="userId" />
+            <div class="col-sm-4">
+                <div class="small-box bg-green">
+
+                    <div class="inner" ng-if="isValidAppraisalPeriod()">
+                        <h3>{{tasksCount}}</h3>
+                        <p>Total Tasks Assigned</p>
+                    </div>
+
+                    <div class="inner" ng-if="!isValidAppraisalPeriod()">
+                        <h3>0</h3>
+                        <p>Total Tasks Assigned</p>
+                    </div>
+
+                    <div class="icon">
+                        <i class="fa fa-briefcase"></i>
+                    </div>
+                    <a href="~/tasks" class="small-box-footer">
+                        View Tasks
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <div class="small-box bg-blue">
+                    <div class="inner">
+                        <h3>{{departmentInfo.NumberOfStaff}}</h3>
+                        <p>Staff In {{departmentInfo.ShortName | uppercase}}</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-users"></i>
+                    </div>
+                    <a href="~/department/{{departmentInfo.ShortName}}" class="small-box-footer">
+                        {{departmentInfo.ShortName | uppercase}}
+                    </a>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+
+            <div class="col-sm-4">
+                <div class="box box-solid">
+                    <div class="box-body">
+                        <div class="col-md-10">
+                            <h4>Notifications</h4>
+                        </div>
+                        <span class="pull-right"><a id="seen-Button" href="#" class="btn bg-yellow" data-toggle="modal" data-target="#notifications"><b> {{ (notifications|filter:{IsRead: false}).length }} </b></a></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-8">
+                <div class="box box-solid">
+                    <div class="box-body">
+
+                        <div class="col-md-10" ng-if="userInfo.SupervisorId == null">
+                            <a href="~/settings/supervisor" class="btn btn-primary"><i class="fa fa-user-plus"></i> Select your supervisor</a>
+                        </div>
+
+                        <div class="col-md-10" ng-if="userInfo.SupervisorId != null">
+                            <h4>
+                                <span class="label label-primary"><strong><i class="fa fa-user"></i> Supervisor</strong></span>
+                                <span> {{userInfo.SupervisorFullName}}</span>
+                            </h4>
+                        </div>
+                        <span class="pull-right"><a href="~/settings/supervisor" class="btn btn-primary" data-toggle="tooltip" title="Supervisor settings" data-placement="left"><i class="fa fa-user-plus"></i></a></span>
+
+                    </div><!-- /.info-box-content -->
+                </div><!-- /.info-box -->
+            </div>
+
+        </div>
+
+        <div class="modal fade" id="cycleInfo" role="dialog" ng-show="appraisalInfo != null">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true"><i class="fa fa-times"></i></span>
+                        </button>
+                        <h4 class="modal-title">This Appraisal Cycle</h4>
+                    </div>
+                    <div class="modal-body" id="cycleInfo-Body">
+                        <h4>This appraisal cycle starts on the <span class="text-primary"><b>{{appraisalInfo.DateBegin}}</b></span> <br>and ends on the <span class="text-primary"><b>{{appraisalInfo.DateEnd}}</b></span></h4>
+                        <br>
+                        <h4><span class="label bg-light-blue">This appraisal cycle has <b>{{periodCount}}</b> appraisal periods</span></h4>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>S/No.</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="period in periods">
+                                    <td><span class="label label-info">{{$index + 1}}</span></td>
+                                    <td>{{period.Begin}}</td>
+                                    <td>{{period.End}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="notifications" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <a class="btn btn-default btn-flat btn-sm pull-right" id="mark-all-read" style="margin-right:20px;margin-top:0;"><i class="fa fa-circle-o text-yellow"></i>  Mark All As Read</a>
+                        <h4 class="modal-title">All Notifications</h4>
+                    </div>
+                    <div class="modal-body notification">
+                        <ul class="notification-menu" ng-repeat="notification in notifications">
+                            <li class="notification-mg" ng-if="notification.IsRead == true">
+                                <a>
+                                    <i class="{{notification.FontAwesome}}"></i> {{ notification.Message }}
+                                </a>
+                            </li>
+                            <li class="notification-mg" ng-if="notification.IsRead == false">
+                                <a class="text-black" id="read-notification" href="" ng-click="readNotification(notification)" >
+                                    <i class="{{notification.FontAwesome}}"></i> {{ notification.Message }}
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="loadmore">
+                            <a href="" class="btn btn-primary btn-flat" id="load">Load More...</a>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section scripts{
+    @*<script src="~/Views/Staff/dashboardCtrl.js"></script>*@
+<script src="~/Scripts/App/dashboardCtrl.js"></script>
+
+    <script type="text/javascript">
+
+        $(function () {
+
+                var init_load = 1;
+                var more_load = 1;
+
+                $('.notification-mg').slice(0, init_load).show();
+
+                if ($('.notification-mg:hidden').length > init_load) {
+                    $('.loadmore').fadeIn('slow');
+                };
+
+                $('#load').on('click', function (e) {
+                    e.preventDefault();
+                    $('.notification-mg:hidden').slice(0, more_load).slideDown();
+                    if ($('.notification-mg:hidden').length == 0) {
+                        $('.loadmore').fadeOut('slow');
+                    };
+                    $('.notification').animate({
+                        scrollTop:
+                        $(this).offset().top
+                    }, 1500);
+                });
+            
+        }); 
+
+    </script>
+
+
+}
+

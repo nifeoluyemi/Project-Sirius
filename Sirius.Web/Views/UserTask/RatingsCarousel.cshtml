@@ -1,0 +1,82 @@
+﻿@model List<Sirius.Services.DTO.RatingsAndCommentsDTO>
+
+@{
+    int count = Model.Count;
+    string carouselId = ViewBag.CarouselId as string;
+}
+
+@if (count > 1)
+{
+    <div id="text-carousel-@carouselId" class="carousel slide text-carousel" data-ride="carousel">
+
+        <div class="row">
+            <div class="col-xs-offset-1 col-xs-11">
+                <div class="carousel-inner">
+                    @for (int i = 0; i < count; i++)
+                    {
+                        if (i == 0)
+                        {
+                            <div class="item active">
+                                <div class="carousel-content">
+                                    <span class="row">
+                                        <span class="col-md-4">
+                                            <a data-toggle="popover" data-trigger="hover" data-content="@Model[i].EvaluatorName" data-placement="right">
+                                                <img width="50" src="@Url.Action("GetUserIdAvatar", "Base", new { userId = Model[i].EvaluatorId })" class="user-image img-circle" alt="User Image">
+                                            </a>
+                                        </span>
+                                        <span class="col-md-8">
+                                            <p style="font-size:20px;"><span class="label label-primary"> @Model[i].Body </span></p>
+                                            <small>@Model[i].EvaluationDate</small>
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="item">
+                                <div class="carousel-content">
+                                    <span class="row">
+                                        <span class="col-md-4">
+                                            <a data-toggle="popover" data-trigger="hover" data-content="@Model[i].EvaluatorName" data-placement="right">
+                                                <img width="50" src="@Url.Action("GetUserIdAvatar", "Base", new { userId = Model[i].EvaluatorId })" class="user-image img-circle" alt="User Image">
+                                            </a>
+                                        </span>
+                                        <span class="col-md-8">
+                                            <p style="font-size:20px;"><span class="label label-primary"> @Model[i].Body </span></p>
+                                            <small>@Model[i].EvaluationDate</small>
+                                        </span>
+
+                                    </span>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+        <a class="left carousel-control" href="#text-carousel-@carouselId" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+        </a>
+        <a class="right carousel-control" href="#text-carousel-@carouselId" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+        </a>
+    </div>
+}
+else if (count == 1)
+{
+    <span class="col-md-offset-1 col-md-3">
+        <a data-toggle="popover" data-trigger="hover" data-content="@Model[0].EvaluatorName" data-placement="right">
+            <img width="50" src="@Url.Action("GetUserIdAvatar", "Base", new { userId = Model[0].EvaluatorId })" class="user-image img-circle" alt="User Image">
+        </a>
+    </span>
+    <span class="col-md-8">
+        <p style="font-size:20px;"><span class="label label-primary"> @Model[0].Body </span></p>
+
+        <small>@Model[0].EvaluationDate</small>
+    </span>
+}
+else
+{
+    <h4><span class="label label-info"> No ratings </span></h4>
+}

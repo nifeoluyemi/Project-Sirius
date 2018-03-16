@@ -1,0 +1,37 @@
+﻿@model Sirius.Web.Models.AppraisalSettingsPreviewViewModel
+
+<div class="col-md-12">
+    <h4>The appraisal cycle will start on the <span class="text-primary"><b>@Model.BeginDate</b></span> <br>and end on the <span class="text-primary"><b>@Model.EndDate</b></span></h4>
+    <h4><span class="label bg-light-blue">This appraisal cycle will have <b>@Model.Periods.Count</b> appraisal periods</span></h4>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>S/No.</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Periods.Count; i++)
+            {
+                <tr>
+                    <td><span class="label label-info">@(i+1)</span></td>
+                    <td>@Model.Periods[i].BeginDate</td>
+                    <td>@Model.Periods[i].EndDate</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+@if (Model.IsRenew)
+{
+    <div class="col-md-offset-7 col-md-5">
+        <a id="saveSettings-Button" href="#" data-href="@Model.PostDataUrl" class="btn btn-block btn-success"><b>Renew</b></a>
+    </div>
+}
+else
+{
+    <div class="col-md-offset-3 col-md-6">
+        <a id="saveSettings-Button" href="#" data-href="@Model.PostDataUrl" class="btn btn-block btn-success">Save Changes</a>
+    </div>
+}

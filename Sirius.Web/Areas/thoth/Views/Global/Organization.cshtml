@@ -1,0 +1,152 @@
+﻿@model Sirius.Web.Areas.thoth.Models.OrganizationViewModel
+
+@{
+    ViewBag.Title = "Organizations";
+    Layout = "~/Areas/thoth/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.PageHeader = "Organization";
+    ViewBag.PageDescription = "Add and Remove Organization.";
+}
+
+
+<div class="row">
+
+    <div class="col-sm-5">
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <i></i>
+                <h2 class="box-title">Add An Organisation.</h2>
+            </div>
+            
+            @using (Html.BeginForm("Organization", "Global", FormMethod.Post, new { id = "addOrganizationForm" })) 
+            { 
+                @Html.AntiForgeryToken()
+                <div class="box-body">
+                    <div class="">
+                        <div class="picture-container">
+                            <div class="picture">
+                                <img src="~/Template/dist/img/logo1.jpg" class="picture-src" id="wizardPicturePreview" title="" />
+                                <input type="file" id="wizard-picture">
+                            </div>
+                            <h6>Choose Image</h6>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Organization Name</label>
+                        @Html.TextBoxFor(m => m.FullName, new { @class = "form-control", @placeholder = "Organization name in full", autocomplete = "off" })
+                        @Html.ValidationMessageFor(m => m.FullName, null, new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        <label>Short Name</label>                      
+                         @Html.TextBoxFor(m => m.ShortName, new { id = "shortname", @class = "form-control", @placeholder = "short name for organization", autocomplete = "off" })
+                        <label id="shortnameAvailability"></label>  
+                    </div>
+                    <div class="form-group">
+                        <label>Email Suffix</label>
+                        @Html.TextBoxFor(m => m.EmailSuffix, new { @class = "form-control", @placeholder = "Email suffix", autocomplete = "off" })
+                        @Html.ValidationMessageFor(m => m.EmailSuffix, null, new { @class = "text-danger"})
+                    </div>
+                    <div class="form-group">
+                        <label>Domain name</label>
+                        @Html.TextBoxFor(m => m.DomainName, new { @class = "form-control" })
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Add one department</div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label>Department name</label>
+                                @Html.TextBoxFor(m => m.DepartmentName, new { @class = "form-control", @placeholder = "Department full name", autocomplete = "off" })
+                            </div>
+                            <div class="form-group">
+                                <label>Department Shortname</label>
+                                @Html.TextBoxFor(m => m.DepartmentShortname, new { @class = "form-control", @placeholder = "Department shortname", autocomplete = "off" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box-footer">
+                    <a href="javascript:document.getElementById('addOrganizationForm').submit()" class="btn btn-success btn-flat pull-right" id="addButton">Add Organisation</a>
+                </div>
+            }
+        </div>
+
+    </div>
+
+
+    <div class="col-sm-7">
+        <div class="box box-success">
+            <div class="box-header">
+                <h3 class="box-title">Organization List.</h3>
+                <div class="box-tools pull-right">
+                    <ul class="pagination pagination-sm inline">
+                        <li><a href="#">&laquo;</a></li>
+                        <li><a href="#">1</a></li>
+                        <li><a href="#">2</a></li>
+                        <li><a href="#">3</a></li>
+                        <li><a href="#">&raquo;</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="box-body">
+                <ul id="orgList" class="todo-list">
+                    <li id="spinner"><i class="fa fa-refresh fa-spin fa-2x text-center"></i></li>
+                </ul>
+            </div>
+            <div class="box-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var url = '/api/organizationapi';
+            $.ajax({
+                url: url,
+                dataType: "json",
+                type: "GET",
+                cache: false,
+                beforeSend: function () {
+                    $('#spinner').show();
+                },
+                success: function (data) {
+                    $('#spinner').hide();
+                    $.each(data, function (key, val) {
+                        var org = '<li><span class=""><i class="fa fa-ellipsis-v"></i><i class="fa fa-ellipsis-v"></i></span><span class="text">' + val.OrganizationName + '</span><div class="tools"><i class="fa fa-edit"></i><i class="fa fa-trash-o"></i></div></li>';
+                        $('#orgList').append(org);
+                    })
+                },
+                error: function () {
+                    $('#spinner').hide();
+                    var error = '<li>Error retrieving Organizations</li>';
+                    $('#orgList').append(org);
+                }
+            });
+
+            $('#shortname').keyup(function () {
+                var Shortname = $(this).val();
+                var urlToCheck = '/api/organizationapi/organizationexist?shortname=' + Shortname;
+
+                if (Shortname.length > 1) {
+                    $.ajax({
+                        url: urlToCheck,
+                        dataType: "json",
+                        type: "POST",
+                        success: function (data) {
+                            if (data == true) {
+                                //shortname exists
+                                $('#shortnameAvailability').html('<span class="text-danger">Organization ShortName Already Exists</span>');
+                            } else {
+                                $('#shortnameAvailability').html('<span class="text-success">Available</span>');
+                            }
+                        }
+                    });
+                } else if (Shortname.length == 0) {
+                    $('#shortnameAvailability').html('');
+                } else {
+                    $('#shortnameAvailability').html('<span class="text-success">More than one character</span>');
+                }
+            });
+        });
+    </script>
+}

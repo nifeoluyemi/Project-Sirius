@@ -1,0 +1,30 @@
+﻿@model Sirius.Web.Models.EditDepartmentSettingViewModel
+
+@using (Ajax.BeginForm("DepartmentSetting", "Settings", new AjaxOptions()
+    {
+        OnBegin = "departmentBegin",
+        OnComplete = "departmentComplete",
+        OnFailure = "departmentFailure",
+        OnSuccess = "departmentSuccess",
+        HttpMethod = "Post",
+        InsertionMode = InsertionMode.Replace,
+    }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.UserHasDoneAppraisal)
+    <div class="form-group col-md-12">
+        @if (Model.UserHasDoneAppraisal)
+        {
+            <div class="callout callout-warning">
+                <p>
+                    Please note that you have entered an appraisal period in @Model.CurrentDepartmentName, however, You can change your
+                    department now but it will reflect at the end of this appraisal cycle.
+                </p>
+            </div>
+        }
+        <label class="control-label">Select your new department: </label>
+        @Html.DropDownListFor(m => m.DepartmentId, new SelectList(Model.DepartmentList, "Value", "Text", 0), new { @class = "form-control" })
+        <br />
+        <button id="submitButton" class="btn btn-warning pull-right"><i class="fa fa-warning"></i> Change Department</button>
+    </div>
+}

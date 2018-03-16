@@ -1,0 +1,172 @@
+﻿@section styles{
+    @Styles.Render("~/toastr/css")
+}
+@{
+    ViewBag.Title = "Register";
+    Layout = "~/Views/Shared/_AccountLayout.cshtml";
+}
+
+<div id="form-body">
+    <div class="col-md-offset-1 col-md-10 login-box">
+        <h1> </h1>
+        <div class="validate-Form">
+            <h4><a href="~/user/login">Sign in Here</a></h4>
+            <h2>Find your organization</h2>
+            <br>
+            <div class="form-group has-feedback">
+                <label>Enter your organization/company name</label>
+                <input id="organizationName" type="text" name="username" class="form-control input-lg" placeholder="Company name">
+                <span id="name-validation" class="text-warning"></span>
+            </div>
+            <div class="row">
+                <div class="col-md-offset-6 col-md-6">
+                    <button id="go-button" type="submit" class="btn bg-purple btn-block btn-lg btn-flat">Go <i class="fa fa-arrow-circle-right"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+@Scripts.Render("~/toastr/js")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#organizationName').keyup(function (event) {
+                var organizationName = $(this).val();
+                if ($.trim(organizationName).length > 0) {
+                    $("#go-button").removeAttr('disabled');
+                }
+                else {
+                    $("#go-button").attr('disabled', 'disabled');
+                }
+            });
+
+            $("#go-button").click(function (event) {
+                $thisButton = $(this);
+                $("#name-validation").html('');
+                var organizationName = $("#organizationName").val();
+                if ($.trim(organizationName).length > 0) {
+                    var urlToCheck = '/api/organizationapi/organizationexist?shortname=' + organizationName;
+                    $.ajax({
+                        url: urlToCheck,
+                        dataType: "json",
+                        type: "POST",
+                        beforeSend: function () {
+                            $thisButton.attr('disabled', 'disabled');
+                        },
+                        success: function (data) {
+                            $thisButton.removeAttr('disabled');
+                            if (data == true) {
+                                //shortname exists
+                                loadRegisterBody(organizationName);
+                            } else {
+                                $("#name-validation").append('<b>Ooops! we cannot find this organization</b>');
+                                $("#name-validation").delay(6000).fadeOut(700);
+                                event.preventDefault();
+                            }
+                        }
+                    });
+                }
+            });
+            //click here to register your organization
+            $(document).on('keyup', '#email-input', function (event) {
+                var Email = $(this).val();
+                var OrgId = $("#organizationId").val();
+                var urlToCheck = '/api/organizationapi/validorganizationemail?orgId=' + OrgId + '&email=' + Email;
+
+                if (Email.length > 1) {
+                    //loading result
+                    $.ajax({
+                        url: urlToCheck,
+                        dataType: "json",
+                        type: "POST",
+                        success: function (data) {
+                            if (data == true) {
+                                $('#registerButton').removeAttr('disabled');
+                                $('#OrgEmailValidation').hide();
+                            }
+                            else {
+                                $('#OrgEmailValidation').html('Invalid Organization Email');
+                                $('#registerButton').attr('disabled', 'disabled');
+                                event.preventDefault();
+                            }
+                        }
+                    });
+                }
+            });
+
+            $(document).on('keyup', '#password', function (event) {
+                $('#password-Validation').html('');
+            });
+
+            $(document).on('keyup', '#confirmPassword', function (event) {
+                $('#cPassword-Validation').html('');
+            });
+
+            $(document).on("click", "#registerButton", function () {
+                var password = $('#password').val();
+                var c_Password = $('#confirmPassword').val();
+                if (password.length < 6) {
+                    $('#cPassword-Validation').html('Your password needs to be more than five(5) characters.');
+                }
+                else {
+                    if (password === c_Password) {
+                        $(this).closest('form').submit();
+                    }
+                    else {
+                        $('#cPassword-Validation').html("Your passwords don't match.");
+                    }
+                }
+            });
+
+        });
+
+        function loadRegisterBody(organizationName) {
+            $.ajax({
+                url: '@Url.Action("SignUp", "User")' + '?orgName=' + organizationName,
+                contentType: 'application/html; charset=utf-8',
+                dataType: "html",
+                type: "GET",
+                cache: false,
+                tryCount: 0,
+                retryLimit: 3,
+                beforeSend: function () {
+                },
+                success: function (data) {
+                    $('#form-body').html(data).fadeIn("slow");
+                },
+                error: function () {
+                    this.tryCount++;
+                    if (this.tryCount <= this.retryLimit) {
+                        //try again
+                        $.ajax(this);
+                        return;
+                    }
+                    else {
+                        window.location.reload(true);
+                    }
+                }
+            })
+        }
+
+        function onBegin() {
+            $('#registerButton').attr('disabled', 'disabled');
+        }
+        function onComplete() {
+            $('#registerButton').removeAttr('disabled');
+        }
+        function onSuccess(response) {
+            if (response.Successful) {
+                setTimeout(function () {
+                    window.location.href = "/confirmationsent";
+                }, 500);
+            }
+            else {
+                toastr.error(response.Html);
+            }
+        }
+        function onFailure() {
+            toastr.warning("please fill all required fields", "Ooops!");
+        }
+    </script>
+}

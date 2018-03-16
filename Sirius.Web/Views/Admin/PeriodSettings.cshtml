@@ -1,0 +1,54 @@
+﻿@model Sirius.Web.Models.PeriodSettingsViewModel
+
+<div class="box-header with-border">
+    <h2 class="box-title">Set Appraisal Period(s)</h2>
+</div>
+<div class="box-body">
+@Html.HiddenFor(m => m.CycleDuration, new { id = "appraisalCycleDuration" })
+    <div class="col-md-12 period-settings">
+        @Html.HiddenFor(m => m.IsEdit)
+        <div class="col-md-8">
+            <h4>How many appraisal periods does your organization have?</h4>
+            <p><small>(A minimum of @Model.MinPeriods and maximum of @Model.MaxPeriods)</small></p>
+        </div>
+        <div class="col-md-4">
+            <h4> </h4>
+            <div class="input-group number-spinner">
+                <span class="input-group-btn data-down">
+                    <button type="button" class="btn btn-success" data-dir="dwn"><span class="glyphicon glyphicon-minus"></span></button>
+                </span>
+                @Html.TextBoxFor(m => m.PeriodFrequency, new { @class = "form-control text-center", min = Model.MinPeriods, max = Model.MaxPeriods, @readonly = true, id = "periodFrequency" })
+                <span class="input-group-btn data-up">
+                    <button type="button" class="btn btn-success" data-dir="up"><span class="glyphicon glyphicon-plus"></span></button>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12 period-settings">
+        <div class="col-md-8">
+            <h4>How many days should the appraisal period span?</h4>
+            <p><small>(A minimum of @Model.MinDays days and maximum of @Model.MaxDays days)</small></p>
+        </div>
+        <div class="col-md-4">
+            <h4> </h4>
+            <div class="input-group number-spinner">
+                <span class="input-group-btn data-down">
+                    <button type="button" class="btn btn-success" data-dir="down"><span class="glyphicon glyphicon-minus"></span></button>
+                </span>
+                @Html.TextBoxFor(m => m.PeriodDuration, new { @class = "form-control text-center", min = Model.MinDays, max = Model.MaxDays, @readonly = true, id = "periodDuration" })
+                <span class="input-group-btn data-up">
+                    <button type="button" class="btn btn-success" data-dir="up"><span class="glyphicon glyphicon-plus"></span></button>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-offset-3 col-md-6">
+        <button type="button" id="applyChanges-Button" class="btn btn-block btn-success">Apply Changes</button>
+    </div>
+</div>
+
+<div class="box-body" id="savechanges-body">
+
+</div>

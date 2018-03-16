@@ -1,0 +1,99 @@
+﻿@model Sirius.Web.Models.PrivilegeViewModel
+
+@section styles{
+    @Styles.Render("~/DataTable/css")
+    @Styles.Render("~/Select2/css")
+    @Styles.Render("~/toastr/css")
+}
+
+@{
+    ViewBag.Title = "Privileges";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+    ViewBag.Active = "m_staffpriviledges";
+}
+
+<div class="box box-default">
+    <div class="box-header with-border">
+        <h2 class="box-title">List of Users</h2>
+    </div>
+    <div class="box-body" id="staffList-Body">
+    </div>
+</div>
+
+@section scripts{
+    @Scripts.Render("~/DataTable/js")
+    @Scripts.Render("~/Select2/js")
+    @Scripts.Render("~/toastr/js")
+    <script type="text/javascript">
+    $(document).ready(function(){
+        loadStaffListBody();
+
+    });
+
+    function roleBegin() {
+        $('#roleSubmitButton').attr('disabled', 'disabled');
+    }
+    function roleComplete() {
+        $('#roleSubmitButton').removeAttr('disabled');
+    }
+    function roleSuccess(response) {
+        if (response.Successful) {
+            toastr.success(response.Html);
+            $('.modal').modal('hide');
+            //setTimeout(function () {
+            //    window.location.reload(true);
+            //}, 1500);
+        }
+        else {
+            toastr.error(response.Html);
+        }
+    }
+    function roleFailure() {
+        toastr.error("Something went wrong, please try again.");
+    }
+    
+    function loadStaffListBody() {
+        var url = '@Url.Action("UsersAndRoles", "Admin")';
+        $.ajax({
+            url: url,
+            contentType: 'application/html; charset=utf-8',
+            dataType: "html",
+            type: "GET",
+            cache: false,
+            tryCount: 0,
+            retryLimit: 3,
+            beforeSend: function () {
+                $('#staffList-Body').html('<div class="col-md-12" style="height:50px;"><div class="overlay"><i class="fa fa-refresh fa-spin"></i></div></div>');
+            },
+            success: function (data) {
+                $('#staffList-Body').html(data);
+                DrawStaffDataTable();
+                $(".select2").select2();
+            },
+            error: function () {
+                this.tryCount++;
+                if (this.tryCount <= this.retryLimit) {
+                    //try again
+                    $.ajax(this);
+                    return;
+                }
+                else {
+                    $('#staffList-Body').html('<div class="col-md-12"><h4>An error occured, please reload this page.</h4></div>');
+                }
+            }
+        });
+    }
+    function DrawStaffDataTable() {
+        $("#userlist").DataTable({
+            "bInfo": false,
+            "ordering": false,
+            "columnDefs": [
+              {
+                  "searchable": false, "targets": [0, 1]
+              }
+            ]
+        });
+    }
+    </script>
+
+}

@@ -1,0 +1,61 @@
+﻿@model Sirius.Web.Models.RequestListViewModel
+
+
+<div class="box-group" id="accordion">
+    <div class="panel box">
+        <div class="box-header with-border">
+            <h4 class="box-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                    Pending Request
+                </a>
+            </h4>
+        </div>
+        <div id="collapseOne" class="panel-collapse collapse">
+            <div class="box-body">
+                @if (Model.PendingRequests.Count() > 0)
+                {
+                    <table class="table">
+                        <tbody>
+                            @foreach (var request in Model.PendingRequests)
+                            {
+                                <tr>
+                                    <td>@request.Role</td>
+                                    <td>@request.RequestDate</td>
+                                    <td><span class="label label-warning">Pending</span></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="panel box">
+        <div class="box-header with-border">
+            <h4 class="box-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+                    Denied Request
+                </a>
+            </h4>
+        </div>
+        <div id="collapseTwo" class="panel-collapse collapse">
+            <div class="box-body">
+                @if (Model.DeniedRequests.Count() > 0)
+                {
+                    <table class="table">
+                        <tbody>
+                            @foreach (var request in Model.DeniedRequests)
+                            {
+                                <tr>
+                                    <td>@request.Role</td>
+                                    <td>@request.RequestDate</td>
+                                    <td><span class="label label-danger">Denied</span></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+        </div>
+    </div>
+</div>

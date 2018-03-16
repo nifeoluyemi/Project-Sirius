@@ -1,0 +1,33 @@
+﻿@model Sirius.Web.Models.AddDepartmentViewModel
+
+<div class="modal-content">
+    @using (Ajax.BeginForm("UpdateDepartment", "Admin", new AjaxOptions() { OnSuccess = "updateDepartmentSuccess", OnFailure = "updateDepartmentFailure", HttpMethod = "Post" }))
+    {
+        <div class="modal-header">
+            @Html.HiddenFor(m => m.DepartmentId)
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true"><i class="fa fa-times"></i></span>
+            </button>
+            <h4 class="modal-title">Upadate @Model.Shortname</h4>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label class="control-label col-sm-6">Shortname:</label>
+                @Html.TextBoxFor(m => m.Shortname, new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-6">Department Name:</label>
+                @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+            </div>
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                <label class="control-label col-sm-6">Description:</label>
+                @Html.TextBoxFor(m => m.Description, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="modal-footer">
+            <input id="editDeptButton" type="submit" value="Update" class="btn btn-success">
+            <a class="btn btn-default pull-left" data-dismiss="modal" aria-hidden="true">Cancel</a>
+        </div>
+    }
+</div>

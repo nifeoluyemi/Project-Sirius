@@ -1,0 +1,37 @@
+﻿@model Sirius.Web.Models.CycleSettingsViewModel
+
+<div class="box box-solid">
+    <div class="box-header with-border">
+        <h2 class="box-title">Appraisal TimeFrame Settings</h2>
+    </div>
+    @Html.HiddenFor(m => m.Duration, new { id = "selectedDurationOption" })
+    <div class="box-body">
+        @if (!Model.IsUpdate)
+        {
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Start Date: <small>(Beginning of this appraisal cycle.)</small></label>
+                    @Html.TextBoxFor(m => m.StartDate, new { id = "startDate", @class = "form-control" })
+                    <span id="date-validation" class="text-danger"></span>
+                </div>
+            </div>
+        }
+        <div class="col-md-12">
+            <h4>Please select how long your organization's appraisal cycle should be:</h4>
+            <div class="form-group">
+                @foreach (var duration in Model.CycleFrequencies)
+                {
+                    <label>
+                        <input type="radio" name="durationOptions" class="flat-red" value="@duration.Value" @(duration.Selected ? "checked" : "")>
+                        @duration.Text
+                        &nbsp
+                    </label>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div id="periodSettings-body">
+
+    </div>
+</div>

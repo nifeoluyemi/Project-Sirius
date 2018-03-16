@@ -1,0 +1,131 @@
+﻿@model Sirius.Web.Models.AccountSettingsViewModel
+
+@section styles{
+    @Styles.Render("~/toastr/css")
+    @Styles.Render("~/Croppie/css")
+}
+
+@{
+    ViewBag.Title = "Account Settings";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+<div class="row">
+    @{ Html.RenderAction("SettingsPartial", new { link = "account" }); }
+
+    <div class="col-md-6">
+        <div class="box box-solid">
+            <div class="box-header with-border">
+                <h2 class="box-title">Account</h2>
+                <p class="text-muted">Change your basic account settings</p>
+            </div>
+            @using (Html.BeginForm("Account", "Settings", FormMethod.Post, new { @class = "form-horizontal", enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="box-body">
+                
+                    <div class="form-group">
+                        <div class="col-md-12"><p class="text-muted">fill in your basic cred..</p></div>
+                        <label class="col-sm-offset-1 col-sm-3 control-label">Firstname </label>
+                        <div class="col-sm-7">
+                            @Html.TextBoxFor(m => m.Firstname, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-offset-1 col-sm-3 control-label">Surname </label>
+                        <div class="col-sm-7">
+                            @Html.TextBoxFor(m => m.Lastname, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-offset-1 col-sm-3 control-label">Middlename </label>
+                        <div class="col-sm-7">
+                            @Html.TextBoxFor(m => m.Middlename, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-offset-1 col-sm-3 control-label">Email </label>
+                        <div class="col-sm-7">
+                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="box-body">
+                    <div class="col-md-12"><p class="text-muted">change your profile picture</p></div>
+                    <div class="picture-container">
+                        <div class="picture">
+                            <img src="@Url.Action("GetUserIdAvatar", "Base", new { userId = Model.UserId })" class="picture-src" id="wizardPicturePreview" title="" />
+                            <input type="file" name="Image" id="wizard-picture" accept="image/png, image/x-png, image/jpg, image/jpeg">
+                            <input type="hidden" id="croppedImage" name="imageCode">
+                        </div>
+                        <h6>Choose Picture</h6>
+                    </div>
+                </div>
+
+                <div class="box-footer">
+                    <div class="form-group">
+                        <div class="col-sm-offset-4 col-sm-5">
+                            <a id="submitButton" href="#" class="btn btn-success btn-block" onclick="$(this).closest('form').submit()">Save Changes</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+
+<!-- The Image cropper modal popup -->
+<div class="modal fade-in" id="cropbox">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><i class="fa fa-close"></i></button>
+                <h4 class="modal-title lead text-center">CROP IMAGE.</h4>
+            </div>
+            <div class="modal-body">
+                <div id="canvas">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-fill btn-default btn-wd btn-flat" id="closedialog">Close</button>
+                <button id="result" class="btn btn-fill btn-info btn-wd btn-flat">Done</button>
+            </div>
+        </div>
+    </div>
+</div> <!-- end modal popup -->
+
+
+@section scripts{
+    @Scripts.Render("~/toastr/js")
+    @Scripts.Render("~/Croppie/js")
+    @Scripts.Render("~/imageCropper/js")
+
+    <script type="text/javascript">
+          
+
+
+        function accountBegin() {
+            $('#submitButton').attr('disabled', 'disabled');
+        }
+        function accountComplete() {
+            $('#submitButton').removeAttr('disabled');
+        }
+        function accountSuccess(response) {
+            if (response.Successful) {
+                toastr.success(response.Html);
+            }
+            else {
+                toastr.error(response.Html);
+            }
+        }
+        function accountFailure() {
+            toastr.error("Something went wrong, please try again.");
+        }
+
+    </script>
+}
+

@@ -1,0 +1,134 @@
+﻿@model Sirius.Services.DTO.UserDTO
+
+@{
+    int taskNumber = (int)ViewBag.taskno;
+    
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+
+<div class="row">
+
+    <div class="col-md-3">
+
+        <div class="box box-primary">
+            <div class="box-body box-profile">
+                <img class="profile-user-img img-responsive img-circle" src="@Url.Action("GetUserIdAvatar", "Base", new { userId = Model.UserId })" alt="User profile picture">
+                <h3 class="profile-username text-center">@Model.FullName</h3>
+                <p class="text-muted text-center">@Model.StatusShortName</p>
+                <p class="text-center">@Model.DepartmentName</p>
+
+                <a href="/settings/account" class="btn btn-primary btn-block"><i class="fa fa-edit"></i> <b>Edit Profile</b></a>
+            </div><!-- /.box-body -->
+        </div><!-- /.box -->
+
+        <div class="box box-primary">
+            <div class="box-body">
+                <strong><i class="fa fa-briefcase margin-r-5"></i>  Job Description</strong>
+                <p class="text-muted">
+                    @Model.JobDescription
+                </p>
+
+                <hr>
+
+                <strong><i class="fa fa-intersex margin-r-5"></i> Gender</strong>
+                <p class="text-muted">@Model.Gender</p>
+
+                <hr>
+
+                <strong><i class="fa fa-map-marker margin-r-5"></i> Location</strong>
+                <p class="text-muted">F.C.T, Nigeria</p>
+
+            </div><!-- /.box-body -->
+        </div><!-- /.box -->
+
+    </div>
+
+    <div class="col-md-9">
+
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">INFO</h3>
+            </div>
+            <div class="box-body" style="font-size:16px;">
+                
+                <div class="row">
+
+                    <p class="col-md-6">
+                        <i class="fa fa-key"></i> Staff ID <br>
+                        <b>@Model.StaffId</b>
+                    </p>
+                    <p class="col-md-6">
+                        <i class="fa fa-user"></i> Username <br>
+                        <b>@Model.Username</b>
+                    </p>
+                    <p class="col-md-6">
+                        <i class="fa fa-envelope-o"></i> Email Address <br>
+                        <b>@Model.Email</b>
+                    </p>
+
+                </div>
+
+                <hr>
+
+                @if (Model.SupervisorId == null)
+                {
+                    <div class="alert alert-info alert-dismissable">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fa fa-info"></i> You haven't be assigned to a Supervisor yet</h5>
+                    </div>
+                }
+                else
+                {
+                    <!--Team-->
+                    <div>
+                        @*@Html.Action("TeamMembers", new { supervisorid = Model.SupervisorId })*@
+                    </div>
+
+                    <hr>
+
+                    <!--Supervisor-->
+                    <div>
+                        <p class="lead">Supervisor</p>
+                        <a href="#" style="padding:20px;">
+                            <img src="@Url.Action("GetUserIdAvatar", "Base", new { userId = Model.SupervisorId })" alt="User Image" width="120" class="img-circle img-height">
+                            <span style="font-size:20px;font-weight:600;color:#444;"> @Model.SupervisorFullName</span>
+                        </a>
+                    </div>
+                }
+                
+                <hr>
+
+                <div class="row">
+                    <div class="col-sm-4">
+                        <a href="#" class="btn btn-block btn-default btn-flat">Task Assigned <span class="label label-primary pull-right">@taskNumber</span></a>
+                    </div>
+                    <div class="col-sm-4">
+                        <a href="#" class="btn btn-block btn-default btn-flat">Appraisal Dimensions </a>
+                    </div>
+                    <div class="col-sm-4">
+                        <a href="#" class="btn btn-block btn-default btn-flat">View Appraisal</a>
+                    </div>
+                </div>
+
+                <hr>
+
+                <a href="/settings/account" class="btn btn-flat btn-warning pull-right"><i class="fa fa-cogs"></i> Account Settings</a>
+
+            </div>
+        </div>
+
+    </div>
+
+</div><!-- /row-->
+
+@section scripts{
+
+    <script>
+        $(document).ready(function(){
+          $('[data-toggle="tooltip"').tooltip();
+        });
+    </script>
+
+}

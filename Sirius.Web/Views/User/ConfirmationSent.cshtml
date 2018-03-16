@@ -1,0 +1,32 @@
+﻿
+@{
+    ViewBag.Title = "Confirmation Sent";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+
+
+    <div class="center-div text-center" style="max-width:750px;">
+        <i class="fa fa-envelope-o fa-5x" style="color:#605ca8;"></i>
+        <h1>EMAIL CONFIRMATION SENT!<i class="fa fa-paper-plane-o" style="color:gray;"></i></h1>
+        <h3>We've sent you a confirmation email with instructions on how to verify your account. Please check your email.</h3>
+        <h4>If you did not recieve confirmation email recieved click the link below to Resend.</h4>
+
+        <a href="~/sendconfirmation" class="btn btn-success"><i class="fa fa-refresh"></i> RESEND CONFIRMATION</a>
+
+    </div>
+
+
+</div>
+
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            setTimeout(function () {
+                window.location.href = "/user/login";
+            }, 20000);
+        });
+    </script>
+}

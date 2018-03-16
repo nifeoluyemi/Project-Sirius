@@ -1,0 +1,40 @@
+﻿@model Sirius.Web.Models.EditUserStatusViewModel
+
+<div class="modal fade" id="statusSettings" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="fa fa-times"></i></span>
+                </button>
+                <h4 class="modal-title">Change your staff status</h4>
+            </div>
+            @using (Ajax.BeginForm("EditUserStatus", "Settings", null, new AjaxOptions()
+                {
+                    OnBegin = "editStatusBegin",
+                    OnComplete = "editStatusComplete",
+                    OnFailure = "editStatusFailure",
+                    OnSuccess = "editStatusSuccess",
+                    HttpMethod = "Post",
+                    InsertionMode = InsertionMode.Replace,
+                }, new { @class = "form-horizontal" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-offset-1 col-md-10">
+                            <div class="form-group">
+                                <label>Select your new status: </label>
+                                @Html.DropDownListFor(m => m.StaffStatusId, new SelectList(Model.Statuses, "Value", "Text", 0), new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="editButton" type="submit" class="btn btn-success">Change Status</button>
+                    <a class="btn btn-default pull-left" data-dismiss="modal">Close</a>
+                </div>
+            }
+        </div>
+    </div>
+</div>

@@ -1,0 +1,143 @@
+﻿@model Sirius.Web.Models.PMAdminViewModel
+
+@{
+    ViewBag.Title = "AppraisalSettings";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+<div class="row">
+
+
+    <div class="col-sm-5">
+
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">Days In Appraisal Period</h3>
+                <div class="pull-right box-tools">
+                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                </div>
+            </div>
+            <div class="box-body">
+            </div>
+        </div>
+
+
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">Appraisal Recommendations</h3>
+                <div class="pull-right box-tools">
+                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                </div>
+            </div>
+            <div class="box-body">
+                <form>
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Enter Recommendation Here...">
+                        <span class="input-group-btn">
+                            <button class="btn btn-flat btn-success" type="button">Add</button>
+                        </span>
+                    </div>
+                </form>
+            </div>
+            <div style="padding:0px 10px 0px 10px;">
+                <div class="table-responsive">
+                    <table class="table no-margin">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Due and Recomend for Promotion</td>
+                                <td><a href="#" class="btn btn-danger btn-flat btn-xs"><i class="fa fa-trash-o"></i></a></td>
+                            </tr>
+                            <tr>
+                                <td>Due but not Recomend for Promotion</td>
+                                <td><a href="#" class="btn btn-danger btn-flat btn-xs"><i class="fa fa-trash-o"></i></a></td>
+                            </tr>
+                            <tr>
+                                <td>Not due but Recomend for Promotion</td>
+                                <td><a href="#" class="btn btn-danger btn-flat btn-xs"><i class="fa fa-trash-o"></i></a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="col-sm-7">
+
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">Appraisal Dimensions</h3>
+                <div class="pull-right box-tools">
+                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                </div>
+            </div>
+            <div class="box-body">
+                <form>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Enter Dimension Title Here...">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Enter Dimension Description Here...">
+                    </div>
+                    <input type="submit" class="btn btn-flat btn-success pull-right" value="Add">
+                </form>
+            </div>
+            <div style="padding:0px 10px 0px 10px;">
+                <ul class="products-list product-list-in-box">
+                    <li class="item">
+                        <div class="product-info" style="margin-left:0px;">
+                            <p class="product-title">
+                                Quality Of Work
+                                <a href="#" class="btn btn-flat btn-danger btn-xs pull-right"><i class="fa fa-trash-o"></i></a>
+                            </p>
+                            <span class="product-description">
+                                Average rating from the first form is inserted here.
+                            </span>
+                        </div>
+                    </li>
+                    <li class="item">
+                        <div class="product-info" style="margin-left:0px;">
+                            <p class="product-title">
+                                Quantity Of Work
+                                <a href="#" class="btn btn-flat btn-danger btn-xs pull-right"><i class="fa fa-trash-o"></i></a>
+                            </p>
+                            <span class="product-description">
+                                Number of key assignments accomplished
+                            </span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">Appraisal Format <small> Description of Appraisal</small></h3>
+                <!-- tools box -->
+                <div class="pull-right box-tools">
+                    <button class="btn btn-default btn-sm" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+                </div><!-- /. tools -->
+            </div><!-- /.box-header -->
+            <div class="box-body pad">
+                <form>
+                    <textarea class="textarea" placeholder="Place some text here" style="width: 100%; height: 150px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+                    <input type="submit" class="btn btn-flat btn-success pull-right" value="DONE">
+                    <input type="submit" class="btn btn-flat btn-warning" value="EDIT">
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+
+

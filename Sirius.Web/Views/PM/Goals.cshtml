@@ -1,0 +1,80 @@
+﻿@model Sirius.Web.Models.GoalViewModel
+
+@section styles{
+    @Styles.Render("~/toastr/css")
+    @Styles.Render("~/sweetalert/css")
+    @Styles.Render("~/ionRangeSlider/css")
+}
+
+@{
+    ViewBag.Title = "GoalSetting";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+<div class="box box-solid">
+    <div class="box-body">
+        <a data-toggle="modal" href="#addGoal" class="btn bg-purple">Add new goal</a>
+    </div>
+</div>
+@if (Model.Goals.Count() != 0)
+{
+    foreach (var goal in Model.Goals)
+    {
+        <div class="col-md-12">
+            <div class="box box-success collapsed-box">
+                <div class="box-header with-border">
+                    <h2 class="box-title">@goal.Goal</h2>
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse"><b>View</b> <i class="fa fa-plus"></i></button>
+                    </div>
+                </div>
+                <div class="box-body">
+
+                    <h5>DESCRIPTION:</h5>
+                    <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
+                        @goal.Description
+                    </p>
+
+                </div>
+            </div>
+        </div>
+    }
+
+}
+
+@Html.Action("AddGoal")
+
+
+
+@section scripts{
+    @Scripts.Render("~/toastr/js")
+    @Scripts.Render("~/sweetalert/js")
+    @Scripts.Render("~/iCheck/js")
+    @Scripts.Render("~/ionRangeSlider/js")
+
+    <script>
+
+
+        function addGoalBegin() {
+
+        }
+        function addGoalComplete() {
+
+        }
+        function addGoalSuccess(response) {
+            if (response.Successful) {
+                toastr.success(response.Html);
+                setTimeout(function () {
+                    window.location.reload(true);
+                }, 2000);
+            }
+            else {
+                toastr.error(response.Html);
+            }
+        }
+        function addGoalFailure() {
+            toastr.error("An Error occured while processing your request, Please try again.");
+        }
+
+    </script>
+}

@@ -1,0 +1,38 @@
+﻿@model Sirius.Web.Models.SupportViewModel
+
+@{
+    ViewBag.Title = "Support";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+<div class="box box-solid">
+    <div class="box-header with-border">
+        <h2 class="box-title"><b>Support</b></h2>
+    </div>
+    <div class="box-body">
+        <div class="row">
+            <div class="col-md-12">
+            </div>
+            <div class="col-md-4">
+                <h4><i class="fa fa-envelope"></i> - hello@sirius.ng</h4>
+                <h4><i class="fa fa-phone-square"></i> - 08165579233, 08039291465</h4>
+            </div>
+            <div class="col-md-6">
+                <h4>What issue/problem do you need support with?</h4>
+                <div class="form-group">
+                    <label>Subject</label>
+                    @Html.TextBoxFor(m => m.Subject, new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    <label>Message</label>
+                    @Html.TextAreaFor(m => m.Message, new { @class = "form-control", @rows="8" })
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-success btn-block"><b>Send</b></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="box-footer">
+    </div>
+</div>

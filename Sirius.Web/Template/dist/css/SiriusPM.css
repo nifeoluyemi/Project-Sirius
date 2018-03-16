@@ -1,0 +1,328 @@
+/*body background Image */
+
+.login-page-pic{
+	background-image: url("../background/sky13.jpg");
+	background-repeat: no-repeat;
+}
+
+.error{
+	border-color: red;
+	color: red;
+}
+.valid{
+	border-color: green;
+	color: green;
+}
+
+.center-box{
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    padding: 10px;
+    /* bring your own prefixes */
+    transform: translate(-50%, -50%);
+}
+
+.shortname-input{
+    outline:none; 
+    border:none; 
+    border-style: none; 
+    font-weight:bold;
+}
+
+.status-text{
+    text-align: left;
+}
+
+.status-text p {
+    font-size: 16px;
+}
+
+
+/*Picture Style 2CA8FF*/
+.picture-container{
+    position: relative;
+    cursor: pointer;
+    text-align: center;
+}
+.picture{
+    width: 106px;
+    height: 106px;
+    background-color: #999999;
+    border: 4px solid #CCCCCC;
+    color: #FFFFFF;
+    border-radius: 50%;
+    margin: 5px auto;
+    overflow: hidden;
+    transition: all 0.2s;
+    -webkit-transition: all 0.2s;
+}
+.picture:hover{
+    border-color: #605CA8;
+}
+
+.picture input[type="file"] {
+    cursor: pointer;
+    display: block;
+    height: 100%;
+    left: 0;
+    opacity: 0 !important;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+
+.picture-src{
+    width: 100%;
+    
+}
+
+.cropbox{
+	position: relative;
+	width: 500px;
+	height: auto;
+	margin: auto;
+	background-color: #eee;
+}
+
+.center-div{
+    margin: auto;
+    margin-top: 50px;
+    margin-bottom: 150px;
+    right: 0;
+    left: 0;
+}
+
+.fa-fa{
+    font-family: FontAwesome, 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+}
+
+.navbar-custom {
+    background-color:#605ca8;
+    color:#ffffff;
+    border-radius:0;
+}
+
+.navbar-custom .navbar-nav > li > a {
+    color:#fff;
+}
+.navbar-custom .navbar-nav > .active > a, .navbar-nav > .active > a:hover, .navbar-nav > .active > a:focus {
+    color: #ffffff;
+    background-color:transparent;
+}
+.navbar-custom .navbar-brand {
+    color:#eeeeee;
+}
+
+.department-title{
+    height: 120px;
+}
+
+.modal.modal-wide .modal-dialog {
+    width: 90%;
+}
+.modal-wide .modal-body {
+    overflow-y: auto;
+}
+
+.textCircle {
+    border-radius: 50%;
+    behavior: url(PIE.htc); /* remove if you don't care about IE8 */
+    width: 70px;
+    height: 70px;
+    padding: 15px;
+    background: #fff;
+    border: 2px solid #1174b5;
+    color: #1174b5;
+    text-align: center;
+    font: 35px Arial, sans-serif;
+    position: absolute;
+}
+
+
+.carousel-content {
+    display:flex;
+    align-items:center;
+}
+
+.text-carousel {
+    width: 100%;
+    height: auto;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.taskTitle{
+    width: 400px;
+}
+
+@media(max-width: 767px){
+    .taskTitle{
+        width:250px;
+        display:table;
+        white-space: normal !important;
+    }
+    .taskTableEvaluationData{
+        display: none;
+    }
+}
+
+.period-settings{
+    padding:10px 0 10px 0;
+    margin-bottom: 20px;
+}
+
+.staffTaskTitle {
+    width: 35%;
+}
+.staffTaskExpectation {
+    width: 35%;
+}
+
+.supervisor-staff img{
+    margin-left: 20px;
+    margin-bottom: 20px;
+}
+
+.full-name{
+    height: 120px;
+}
+
+.select-staff-body{
+    height: 450px;
+    overflow-y: scroll;
+}
+
+.evaluation-body{
+    max-height: 500px;
+    overflow-y: scroll;
+    padding: 10px;
+}
+
+.comment-body{
+    max-height: 300px;
+    overflow-y: scroll;
+    padding-right: 20px;
+}
+
+.deleteCommentButton{
+  display: none;
+}
+.box-comment:hover .deleteCommentButton{
+  display: inline-block;
+}
+
+.dimension-comments{
+    max-height: 260px;
+    overflow-y: scroll;
+    padding-right: 10px;
+}
+
+.appraisal-TaskTitle{
+    width: 55%;
+}
+
+.cluster-rating{
+    border-left: 2px solid black;
+}
+
+.department-list-body{
+    max-height: 450px;
+    overflow-y: scroll;
+    padding-right: 10px;
+}
+
+
+/*notification popup*/
+
+.notification{
+  padding: 0px;
+  background-color: none;
+  font-size: 18px;
+  margin-bottom: 10px;
+  max-height: 300px;
+  overflow-x: hidden;
+}
+
+.notification-menu{
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.notification-mg{
+    /*display:none;*/
+}
+
+.notification-menu > li > a {
+  color: #444444;
+  display: block;
+  white-space: nowrap;
+  border-bottom: 1px solid #f4f4f4;
+  text-overflow: ellipsis;
+  padding: 10px;
+}
+.notification-menu > li > a:hover {
+  
+  background-color: #f4f4f4;
+  text-decoration: none;
+}
+.notification-menu > li > a > .fa {
+  margin-right: 10px;
+  margin-left: 20px;
+  width: 20px;
+}
+
+.loadmore{
+  padding: 8px;
+  margin: auto;
+  text-align: center;
+  display: none;
+}
+.loadmore > .btn {
+  width: 100%;
+}
+
+/*text color for clicked and unclicked links*/
+
+.text-black{
+  color: #000;
+  font-weight: bold;
+}
+
+.error-div{
+  position: absolute;
+  margin: auto;
+  margin-top: 50px;
+  min-width: 600px;
+  text-align: center;
+  margin-bottom: 200px;
+  right: 0;
+  left: 0;
+
+}
+
+.error-div h2{
+  font-size: 100px;
+  font-weight: 300;
+}
+
+.error-div-content h3{
+  font-size: 30px;
+  font-weight: 300;
+}
+.error-div-content p{
+  font-size: 18px;
+}
+
+.deleteEvaluationButton{
+  display: none;
+}
+.box-Evaluate:hover .deleteEvaluationButton{
+  display: inline-block;
+}
+
+.rating-body{
+    max-height: 250px;
+    overflow-y: scroll;
+}

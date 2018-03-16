@@ -1,0 +1,91 @@
+﻿@model Sirius.Web.Models.AccountSetupViewModel
+
+@{
+    ViewBag.Title = "Setup";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@Html.HiddenFor(m => m.OrganizationId, new { id = "orgId" })
+<div class="container">
+    <div class="col-md-offset-2 col-md-8">
+        <div class="box box-solid">
+            <div class="box-body bg-purple">
+                <div class="row">
+                    <div class="col-md-2">
+                        <span class="pull-right"><i class="fa fa-smile-o fa-5x" style="color:white;"></i></span>
+                    </div>
+                    <div class="col-md-10">
+                        <p style="font-size:35px;">Hi, @Model.UserFirstname</p>
+                        <h4>Welcome to Sirius.ly</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="box box-solid">
+            <div class="box-header text-center">
+                <h2 class="box-title"><b>You're almost there!</b><br><br>Please fill in your details to setup your sirius account</h2>
+            </div>
+        </div>
+        <div class="box box-solid">
+            <div class="box-body">
+                <div class="col-md-offset-2 col-md-8">
+                    @using (Html.BeginForm())
+                    {
+                        <div class="form-group">
+                            <label>Your @Model.OrganizationName Staff ID: <small class="text-muted">(required)</small></label>
+                            @Html.TextBoxFor(m => m.StaffId, new { id = "staffid", @class = "form-control", @placeholder = "1234", name = "staffid", autocomplete = "off" })
+                            @Html.ValidationMessageFor(m => m.StaffId, null, new { id = "StaffIdValidation", @class = "text-danger" })
+                        </div>
+                        <div class="form-group">
+                            <label>Your Status in @Model.OrganizationName: <small class="text-muted">(required)</small></label>
+                            @Html.DropDownListFor(m => m.StaffStatusId, new SelectList(Model.StaffStatuses, "Value", "Text", 0), new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.StaffStatusId, null, new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group">
+                            <label>Your Department: <small class="text-muted">(required)</small></label>
+                            @Html.DropDownListFor(m => m.DepartmentId, new SelectList(Model.Departments, "Value", "Text", 0), new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.DepartmentId, null, new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group">
+                            @Html.AntiForgeryToken()
+                            <label>Job Description</label>
+                            @Html.TextBoxFor(m => m.JobDescription, new { @class = "form-control", @placeholder = "Job description", autocomplete = "off" })
+                            <small class="text-primary">(eg. HR Manager, IT Administrator, Secretary etc)</small>
+                        </div>
+                        <button id="saveButton" type="submit" class="btn bg-purple btn-flat btn-block"><b>SETUP ACCOUNT</b></button>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            var OrgId = $('#orgId').val();
+            $('#staffid').keyup(function (event) {
+                var StaffId = $(this).val();
+                var urlToCheck = '/api/userapi/staffidexist?organizationId=' + OrgId + '&staffId=' + StaffId;
+                $.ajax({
+                    url: urlToCheck,
+                    dataType: "json",
+                    type: "POST",
+                    success: function (data) {
+                        if (data == true) {
+                            $('#saveButton').attr('disabled', 'disabled');
+                            $('#StaffIdValidation').html('This Staff Id already exists');
+                            event.preventDefault();
+                        }
+                        else {
+                            $('#StaffIdValidation').html('');
+                            $('#saveButton').removeAttr('disabled');
+                        }
+                    }
+                })
+            });
+        });
+    </script>
+}
+
+
